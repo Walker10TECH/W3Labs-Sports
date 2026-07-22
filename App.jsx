@@ -12,15 +12,17 @@ const SPORTS_DB = {
     name: "Futebol",
     logo: "https://cdn-icons-png.flaticon.com/512/53/53283.png",
     views: [
-      { id: 'matches', name: 'Jogos', icon: <CalendarDays size={20} /> },
-      { id: 'standings', name: 'Classificação', icon: <Trophy size={20} /> },
+      { id: 'news', name: 'Notícias', icon: <Zap size={20} /> },
+      { id: 'transmission', name: 'Transmissão', icon: <Tv2 size={20} /> },
       { id: 'clubs', name: 'Clubes', icon: <Shield size={20} /> },
-      { id: 'news', name: 'Notícias', icon: <Zap size={20} /> }
+      { id: 'scorers', name: 'Artilheiros', icon: <Target size={20} /> },
+      { id: 'matches', name: 'Jogos', icon: <CalendarDays size={20} /> },
+      { id: 'standings', name: 'Classificação', icon: <Trophy size={20} /> }
     ],
     leagues: {
       "brasileirao": {
           id: "bra.1", apiFootballId: 71, seasonId: 2026, name: "Brasileirão Série A",
-          logo: "https://upload.wikimedia.org/wikipedia/pt/7/75/Campeonato_Brasileiro_de_Futebol_de_2024_-_S%C3%A9rie_A.png",
+          logo: "https://upload.wikimedia.org/wikipedia/commons/2/2b/Campeonato_Brasileiro_S%C3%A9rie_A_logo_%282024%29.svg",
           bg: "https://s2-globo-play.glbimg.com/rHTMAA96-XWwbs6h4pEWeZXlREw=/https://s2.glbimg.com/aNGo_xeD86fO2XMCGBRlpe7rmmg=/i.s3.glbimg.com/v1/AUTH_c3c606ff68e7478091d1ca496f9c5625/internal_photos/bs/2025/L/P/Y3zKUbSTWAUtZN86BTzg/2025-4731-brasileirao-background.jpg",
           clubs: ["Clube_Atlético_Mineiro", "Esporte_Clube_Bahia", "Botafogo_de_Futebol_e_Regatas", "Ceará_Sporting_Club", "Sport_Club_Corinthians_Paulista", "Cruzeiro_Esporte_Clube", "Clube_de_Regatas_do_Flamengo", "Fluminense_Football_Club", "Fortaleza_Esporte_Clube", "Grêmio_Foot-Ball_Porto_Alegrense", "Sport_Club_Internacional", "Esporte_Clube_Juventude", "Mirassol_Futebol_Clube", "Sociedade_Esportiva_Palmeiras", "Red_Bull_Bragantino", "Santos_Futebol_Clube", "São_Paulo_Futebol_Clube", "Sport_Club_do_Recife", "Club_de_Regatas_Vasco_da_Gama", "Esporte_Clube_Vitória"],
       },
@@ -35,29 +37,6 @@ const SPORTS_DB = {
           logo: "https://cdn-img.zerozero.pt/img/logos/competicoes/260_imgbank_cb_20250227155245.png",
           bg: "https://s2-globo-play.glbimg.com/rHTMAA96-XWwbs6h4pEWeZXlREw=/https://s2.glbimg.com/aNGo_xeD86fO2XMCGBRlpe7rmmg=/i.s3.glbimg.com/v1/AUTH_c3c606ff68e7478091d1ca496f9c5625/internal_photos/bs/2025/L/P/Y3zKUbSTWAUtZN86BTzg/2025-4731-brasileirao-background.jpg",
           clubs: ["Clube_Atlético_Mineiro", "Esporte_Clube_Bahia", "Botafogo_de_Futebol_e_Regatas", "Ceará_Sporting_Club", "Sport_Club_Corinthians_Paulista", "Cruzeiro_Esporte_Clube", "Clube_de_Regatas_do_Flamengo", "Fluminense_Football_Club", "Fortaleza_Esporte_Clube", "Grêmio_Foot-Ball_Porto_Alegrense", "Sport_Club_Internacional", "Esporte_Clube_Juventude", "Mirassol_Futebol_Clube", "Sociedade_Esportiva_Palmeiras", "Red_Bull_Bragantino", "Santos_Futebol_Clube", "São_Paulo_Futebol_Clube", "Sport_Club_do_Recife", "Club_de_Regatas_Vasco_da_Gama", "Esporte_Clube_Vitória", "Cuiabá_Esporte_Clube"],
-          logoOverrides: {
-              "Atlético-MG": "https://a.espncdn.com/i/teamlogos/soccer/500/3445.png",
-              "Bahia": "https://a.espncdn.com/i/teamlogos/soccer/500/3441.png",
-              "Botafogo": "https://a.espncdn.com/i/teamlogos/soccer/500/205.png",
-              "Ceará SC": "https://a.espncdn.com/i/teamlogos/soccer/500/3442.png",
-              "Corinthians": "https://a.espncdn.com/i/teamlogos/soccer/500/874.png",
-              "Cruzeiro": "https://a.espncdn.com/i/teamlogos/soccer/500/2026.png",
-              "Flamengo": "https://a.espncdn.com/i/teamlogos/soccer/500/819.png",
-              "Fluminense": "https://a.espncdn.com/i/teamlogos/soccer/500/206.png",
-              "Fortaleza": "https://a.espncdn.com/i/teamlogos/soccer/500/3443.png",
-              "Grêmio": "https://a.espncdn.com/i/teamlogos/soccer/500/824.png",
-              "Internacional": "https://a.espncdn.com/i/teamlogos/soccer/500/826.png",
-              "Juventude": "https://a.espncdn.com/i/teamlogos/soccer/500/3450.png",
-              "Mirassol": "https://a.espncdn.com/i/teamlogos/soccer/500/4433.png",
-              "Palmeiras": "https://a.espncdn.com/i/teamlogos/soccer/500/2029.png",
-              "Red Bull Bragantino": "https://a.espncdn.com/i/teamlogos/soccer/500/3447.png",
-              "Santos": "https://a.espncdn.com/i/teamlogos/soccer/500/837.png",
-              "São Paulo": "https://a.espncdn.com/i/teamlogos/soccer/500/2030.png",
-              "Sport Recife": "https://a.espncdn.com/i/teamlogos/soccer/500/838.png",
-              "Vasco da Gama": "https://a.espncdn.com/i/teamlogos/soccer/500/2031.png",
-              "Vitória": "https://a.espncdn.com/i/teamlogos/soccer/500/3454.png",
-              "Cuiabá": "https://a.espncdn.com/i/teamlogos/soccer/500/10091.png"
-          }
       },
       "premier": {
           id: "eng.1", apiFootballId: 39, seasonId: 2026, name: "Premier League",
@@ -364,6 +343,10 @@ const API_CONFIG = {
     news: (sport, league) => `${API_CONFIG.espn.baseSite}/${sport}/${league}/news?lang=pt&region=br`,
     teams: (sport, league) => `${API_CONFIG.espn.baseSite}/${sport}/${league}/teams?lang=pt&region=br`,
     roster: (league, teamId) => `${API_CONFIG.espn.baseSite}/soccer/${league}/teams/${teamId}/roster?lang=pt`,
+    statistics: (sport, league) => `${API_CONFIG.espn.baseSite}/${sport}/${league}/statistics?lang=pt&region=br`
+  },
+  reidoscanais: {
+    sports: () => `https://api.reidoscanais.st/sports?category=Futebol`
   },
   utils: {
     formatDateForEspn: (date) => {
@@ -699,10 +682,56 @@ const ScoreboardCard = ({ event, league }) => {
   return <GenericScoreboard event={eventWithLogos} league={league} />;
 };
 
+const WikiArticleModal = ({ article, onClose }) => {
+  const [content, setContent] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchArticle = async () => {
+      setLoading(true);
+      try {
+        const res = await fetch(`https://pt.wikipedia.org/w/api.php?action=query&prop=extracts&pageids=${article.pageid}&format=json&origin=*&exintro=false`);
+        const data = await res.json();
+        const page = data.query?.pages?.[article.pageid];
+        if (page) {
+          setContent(page.extract);
+        }
+      } catch (err) {
+        console.error(err);
+      }
+      setLoading(false);
+    };
+    fetchArticle();
+  }, [article.pageid]);
+
+  return (
+    <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/80 backdrop-blur-md p-4 md:p-8">
+      <div className="bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-2xl w-full max-w-4xl h-full max-h-[90vh] overflow-hidden flex flex-col shadow-[0_20px_50px_rgba(0,0,0,0.5)] relative">
+        <div className="p-4 md:p-6 border-b border-[var(--border-color)] flex justify-between items-center bg-[var(--header-bg)] sticky top-0 z-10 backdrop-blur-xl">
+          <h3 className="text-xl md:text-2xl font-bold text-[var(--text-primary)]" dangerouslySetInnerHTML={{ __html: article.title }} />
+          <button onClick={onClose} className="p-2 bg-white/5 rounded-full text-gray-400 hover:text-white hover:bg-[var(--accent)] transition">
+            <X size={24} />
+          </button>
+        </div>
+        <div className="p-6 md:p-10 overflow-y-auto flex-1 custom-scroll wiki-content text-[var(--text-primary)]">
+          {loading ? (
+             <div className="w-full py-20 flex justify-center"><div className="loader-ring"></div></div>
+          ) : content ? (
+             <div dangerouslySetInnerHTML={{ __html: content }} />
+          ) : (
+             <p className="text-center text-gray-500">Conteúdo indisponível.</p>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+};
+
 const WikiSearch = () => {
   const [query, setQuery] = useState('');
   const [results, setResults] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [selectedArticle, setSelectedArticle] = useState(null);
 
   const searchWiki = async (e) => {
     e.preventDefault();
@@ -741,12 +770,18 @@ const WikiSearch = () => {
 
       <div className="space-y-4">
         {results.map(r => (
-          <a key={r.pageid} href={`https://pt.wikipedia.org/?curid=${r.pageid}`} target="_blank" rel="noreferrer" className="glass-panel p-5 block hover:border-[var(--accent)] transition">
+          <button 
+            key={r.pageid} 
+            onClick={() => setSelectedArticle({ title: r.title, pageid: r.pageid })}
+            className="w-full text-left glass-panel p-5 block hover:border-[var(--accent)] transition hover:-translate-y-1"
+          >
             <h4 className="text-lg font-bold text-[var(--accent)] mb-2" dangerouslySetInnerHTML={{ __html: r.title }} />
             <p className="text-sm text-[var(--text-muted)] leading-relaxed" dangerouslySetInnerHTML={{ __html: r.snippet + '...' }} />
-          </a>
+          </button>
         ))}
       </div>
+      
+      {selectedArticle && <WikiArticleModal article={selectedArticle} onClose={() => setSelectedArticle(null)} />}
     </div>
   );
 };
@@ -813,6 +848,137 @@ const MatchDetailsModal = ({ eventId, leagueId, onClose }) => {
   );
 };
 
+const PremiumWebInterface = ({
+  theme,
+  setTheme,
+  sportConfig,
+  leagueConfig,
+  currentLeague,
+  setCurrentLeague,
+  view,
+  setView,
+  children
+}) => (
+  <div id="app-layout" className={theme === 'light' ? 'light-mode' : ''}>
+    <div id="app-background" style={{ backgroundImage: `url(${leagueConfig.bg})` }}></div>
+    
+    <div className="premium-wrapper">
+      {/* Desktop Sidebar */}
+      <aside className="premium-sidebar">
+        <div className="premium-logo">W3Labs</div>
+        <nav className="premium-nav">
+          {sportConfig.views.map((v) => {
+            const isActive = view === v.id;
+            return (
+              <button
+                key={v.id}
+                onClick={() => setView(v.id)}
+                className={`premium-nav-item ${isActive ? 'active' : ''}`}
+              >
+                {React.cloneElement(v.icon, { 
+                  color: isActive ? 'var(--accent)' : 'var(--text-muted)',
+                  size: 24
+                })}
+                <span>{v.name}</span>
+              </button>
+            );
+          })}
+        </nav>
+      </aside>
+
+      {/* Main Feed Area */}
+      <main className="premium-main">
+        <header className="premium-header">
+          <div className="mobile-logo">W3Labs</div>
+          <button 
+            onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
+            className="w-10 h-10 rounded-full flex items-center justify-center bg-[var(--hover-bg)] text-[var(--text-primary)] transition hover:scale-105"
+          >
+            {theme === 'dark' ? <Sun size={20} /> : <Moon size={20} />}
+          </button>
+        </header>
+
+        <div className="stories-container">
+          {Object.entries(sportConfig.leagues).map(([key, league]) => {
+            const isActive = currentLeague === key;
+            return (
+              <div key={key} className="story-item" onClick={() => setCurrentLeague(key)}>
+                <div className={`story-ring ${isActive ? 'active' : ''}`}>
+                  <div className="story-avatar">
+                    <img src={league.logo} alt={league.name} />
+                  </div>
+                </div>
+                <span className="story-name">{league.name}</span>
+              </div>
+            );
+          })}
+        </div>
+
+        {children}
+      </main>
+
+      {/* Mobile Bottom Nav */}
+      <nav className="mobile-bottom-nav">
+        {sportConfig.views.map((v) => {
+          const isActive = view === v.id;
+          return (
+            <button
+              key={v.id}
+              onClick={() => setView(v.id)}
+              className={`mobile-nav-item ${isActive ? 'active' : ''}`}
+            >
+              {React.cloneElement(v.icon, { 
+                color: isActive ? 'var(--accent)' : 'var(--text-muted)',
+                size: isActive ? 24 : 22
+              })}
+            </button>
+          );
+        })}
+      </nav>
+    </div>
+  </div>
+);
+const WikiPlayerImage = ({ playerName, defaultImage, className, alt }) => {
+  const [imgSrc, setImgSrc] = useState(defaultImage || 'https://via.placeholder.com/150');
+  const [triedWiki, setTriedWiki] = useState(false);
+
+  useEffect(() => {
+    // Only fetch from Wiki if no valid headshot was provided
+    const isPlaceholder = !defaultImage || defaultImage.includes('placeholder.com') || defaultImage.includes('default');
+    
+    if (isPlaceholder && !triedWiki) {
+      const fetchWiki = async () => {
+        try {
+          const searchRes = await fetch(`https://pt.wikipedia.org/w/api.php?action=query&list=search&srsearch=${encodeURIComponent(playerName + ' futebol')}&utf8=&format=json&origin=*`);
+          const searchData = await searchRes.json();
+          
+          if (searchData.query?.search?.length > 0) {
+            const title = searchData.query.search[0].title;
+            const imgRes = await fetch(`https://pt.wikipedia.org/w/api.php?action=query&prop=pageimages&titles=${encodeURIComponent(title)}&pithumbsize=300&format=json&origin=*`);
+            const imgData = await imgRes.json();
+            const pages = imgData.query?.pages;
+            
+            if (pages) {
+              const pageId = Object.keys(pages)[0];
+              if (pages[pageId].thumbnail?.source) {
+                setImgSrc(pages[pageId].thumbnail.source);
+              }
+            }
+          }
+        } catch (e) {
+          console.error("Wiki image fetch failed for", playerName);
+        }
+        setTriedWiki(true);
+      };
+      fetchWiki();
+    } else if (defaultImage && !isPlaceholder) {
+      setImgSrc(defaultImage);
+    }
+  }, [playerName, defaultImage, triedWiki]);
+
+  return <img src={imgSrc} alt={alt} className={className} />;
+};
+
 export default function App() {
   const [currentSport, setCurrentSport] = useState('soccer');
   const [currentLeague, setCurrentLeague] = useState('brasileirao');
@@ -825,7 +991,12 @@ export default function App() {
   const [matchesData, setMatchesData] = useState([]);
   const [standingsData, setStandingsData] = useState(null);
   const [newsData, setNewsData] = useState([]);
+  const [scorersData, setScorersData] = useState([]);
+  const [transmissionData, setTransmissionData] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [selectedNewsArticle, setSelectedNewsArticle] = useState(null);
+  const [selectedTransmission, setSelectedTransmission] = useState(null);
+  const [activeEmbedIndex, setActiveEmbedIndex] = useState(0);
 
   const sportConfig = SPORTS_DB[currentSport];
   const leagueConfig = sportConfig.leagues[currentLeague];
@@ -848,6 +1019,16 @@ export default function App() {
           const res = await fetch(API_CONFIG.espn.news(currentSport, leagueConfig.id));
           const data = await res.json();
           setNewsData(data.articles || []);
+        } else if (view === 'scorers') {
+          const res = await fetch(API_CONFIG.espn.statistics(currentSport, leagueConfig.id));
+          const data = await res.json();
+          // Find the goalsLeaders array
+          const goalsStat = data.stats?.find(s => s.name === 'goalsLeaders' || s.name === 'totalGoals');
+          setScorersData(goalsStat?.leaders || []);
+        } else if (view === 'transmission') {
+          const res = await fetch(API_CONFIG.reidoscanais.sports());
+          const json = await res.json();
+          setTransmissionData(json.data || []);
         }
       } catch (err) {
         console.error("Failed fetching data", err);
@@ -873,192 +1054,314 @@ export default function App() {
     return () => clearInterval(interval);
   }, [view, matchesData, currentLeague, currentDate]);
 
-  return (
-    <div className={`h-screen w-full flex overflow-hidden ${theme === 'light' ? 'light-mode' : ''}`}>
-      <div id="app-background" style={{ backgroundImage: `url(${leagueConfig.bg})` }}></div>
+  const mainContent = (
+    <div id="main-scroll" className="feed-post p-2 md:p-4">
+      {selectedMatchId && <MatchDetailsModal eventId={selectedMatchId} leagueId={leagueConfig.id} onClose={() => setSelectedMatchId(null)} />}
 
-      {/* Sidebar Desktop */}
-      <aside className={`w-64 bg-[var(--bg-secondary)] border-r border-[var(--border-color)] flex-col hidden md:flex z-20 p-6`}>
-        <div className="flex items-center gap-3 mb-8">
-          <div className="w-10 h-10 rounded-xl bg-[var(--accent)] flex items-center justify-center text-white shadow-lg shadow-blue-500/20">
-            <Trophy size={20} />
-          </div>
-          <span className="font-bold text-xl tracking-tight text-[var(--text-primary)]">W3Labs-Sports</span>
-        </div>
-
-        <div className="text-xs font-bold text-gray-500 uppercase tracking-widest mb-3">Navegação</div>
-        <div className="space-y-1 mb-8">
-          {sportConfig.views.map(v => (
-            <button
-              key={v.id}
-              onClick={() => setView(v.id)}
-              className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition font-medium text-sm
-                                ${view === v.id ? 'bg-[var(--accent)]/10 text-[var(--text-primary)] border border-[var(--accent)]/20' : 'text-gray-400 hover:bg-white/5 hover:text-white'}
-                            `}
-            >
-              <span className={view === v.id ? 'text-[var(--accent)]' : ''}>{v.icon}</span>
-              {v.name}
-            </button>
-          ))}
-        </div>
-
-        <div className="text-xs font-bold text-gray-500 uppercase tracking-widest mb-3">Ligas</div>
-        <div className="space-y-1 overflow-y-auto flex-1 custom-scroll">
-          {Object.entries(sportConfig.leagues).map(([key, league]) => (
-            <button
-              key={key}
-              onClick={() => setCurrentLeague(key)}
-              className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg transition
-                                ${currentLeague === key ? 'bg-white/10 text-[var(--text-primary)]' : 'text-gray-400 hover:bg-white/5 hover:text-white'}
-                            `}
-            >
-              <img src={league.logo} alt={league.name} className="w-5 h-5 object-contain" />
-              <span className="text-sm font-medium">{league.name}</span>
-            </button>
-          ))}
-        </div>
-      </aside>
-
-      {/* Main Content Area */}
-      <main className="flex-1 flex flex-col relative h-full overflow-hidden">
-        {/* Header */}
-        <header className="h-16 px-4 md:px-6 flex items-center justify-between border-b border-[var(--border-color)] bg-[var(--header-bg)] backdrop-blur-md z-10 sticky top-0">
-          <div className="flex items-center gap-3">
-            <button className="md:hidden text-[var(--text-primary)]" onClick={() => setIsSidebarOpen(!isSidebarOpen)}>
-              <Menu size={24} />
-            </button>
-            <div className="flex items-center gap-2">
-              <img src={leagueConfig.logo} alt="League" className="w-8 h-8 object-contain" />
-              <h1 className="font-bold text-lg hidden sm:block text-[var(--text-primary)]">{leagueConfig.name}</h1>
-            </div>
-          </div>
-
-          <div className="flex items-center gap-4">
-            <button
-              onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
-              className="w-10 h-10 rounded-full flex items-center justify-center bg-white/5 border border-[var(--border-color)] text-[var(--text-primary)] hover:bg-white/10 transition"
-            >
-              {theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
-            </button>
-          </div>
-        </header>
-
-        {/* Content Scroll */}
-        <div id="main-scroll" className="flex-1 overflow-y-auto p-4 md:p-8 pb-32">
-          {selectedMatchId && <MatchDetailsModal eventId={selectedMatchId} leagueId={leagueConfig.id} onClose={() => setSelectedMatchId(null)} />}
-
-          {loading ? (
-            <div className="w-full py-20 flex justify-center"><div className="loader-ring"></div></div>
-          ) : (
-            <>
-              {view === 'matches' && (
-                <div className="max-w-4xl mx-auto space-y-6">
-                  <div className="flex justify-between items-center mb-6">
-                    <h2 className="text-xl font-bold text-[var(--text-primary)] flex items-center gap-3">
-                      Jogos do Dia
-                      <input 
-                        type="date" 
-                        value={API_CONFIG.utils.formatDateInput(currentDate)}
-                        onChange={(e) => {
-                          const val = e.target.value;
-                          if (val) {
-                            const [y, m, d] = val.split('-');
-                            setCurrentDate(new Date(y, m - 1, d));
-                          }
-                        }}
-                        className="text-sm font-normal bg-black/30 border border-white/10 rounded-lg px-2 py-1 text-white outline-none focus:border-[var(--accent)]"
-                      />
-                    </h2>
-                  </div>
-                  {matchesData.length === 0 ? (
-                    <div className="glass-panel p-10 text-center text-gray-500">Nenhum jogo programado para esta data.</div>
-                  ) : (
-                    <div className="flex flex-col gap-6">
-                      {matchesData.map(ev => (
-                        <div key={ev.id} className="cursor-pointer hover:scale-[1.01] transition-transform duration-300" onClick={() => setSelectedMatchId(ev.id)}>
-                          <ScoreboardCard event={ev} league={leagueConfig} />
-                        </div>
-                      ))}
-                    </div>
-                  )}
-                </div>
-              )}
-
-              {view === 'standings' && standingsData && (
-                <div className="max-w-4xl mx-auto">
-                  <h2 className="text-xl font-bold text-[var(--text-primary)] mb-6">Classificação</h2>
-                  {standingsData.children?.map((group, idx) => (
-                    <div key={idx} className="cbf-standings-card mb-8">
-                      <div className="cbf-standings-header">
-                        <div>#</div><div className="text-left">Clube</div><div className="text-center">Pts</div>
-                        <div className="text-center hidden sm:block">J</div><div className="text-center hidden sm:block">V</div>
-                        <div className="text-center hidden sm:block">E</div><div className="text-center hidden sm:block">D</div>
-                        <div className="text-center hidden sm:block">SG</div><div className="text-center">%</div>
-                      </div>
-                      {group.standings?.entries?.map((row, rIdx) => {
-                        const val = n => row.stats.find(s => s.name === n)?.value || 0;
-                        const points = val('points');
-                        const gp = val('gamesPlayed');
-                        return (
-                          <div key={row.team.id} className={`cbf-standings-row`}>
-                            <div className={`cbf-rank-cell ${getZoneClass(row.note)}`}><span>{val('rank')}</span></div>
-                            <div className="cbf-team-cell">
-                              <img src={row.team.logos?.[0]?.href} alt="" />
-                              <span className="truncate text-sm">{row.team.shortDisplayName}</span>
-                            </div>
-                            <span className="cbf-points-cell">{points}</span>
-                            <span className="cbf-stats-cell hidden sm:block">{gp}</span>
-                            <span className="cbf-stats-cell hidden sm:block">{val('wins')}</span>
-                            <span className="cbf-stats-cell hidden sm:block">{val('ties')}</span>
-                            <span className="cbf-stats-cell hidden sm:block">{val('losses')}</span>
-                            <span className="cbf-stats-cell hidden sm:block">{val('pointDifferential')}</span>
-                            <span className="cbf-stats-cell text-xs">{gp > 0 ? Math.round((points / (gp * 3)) * 100) : 0}%</span>
-                          </div>
-                        );
-                      })}
+      {loading ? (
+        <div className="w-full py-20 flex justify-center"><div className="loader-ring"></div></div>
+      ) : (
+        <>
+          {view === 'matches' && (
+            <div className="max-w-4xl mx-auto space-y-6">
+              <div className="flex justify-between items-center mb-6">
+                <h2 className="text-xl font-bold text-[var(--text-primary)] flex items-center gap-3">
+                  Jogos do Dia
+                  <input 
+                    type="date" 
+                    value={API_CONFIG.utils.formatDateInput(currentDate)}
+                    onChange={(e) => {
+                      const val = e.target.value;
+                      if (val) {
+                        const [y, m, d] = val.split('-');
+                        setCurrentDate(new Date(y, m - 1, d));
+                      }
+                    }}
+                    className="text-sm font-normal bg-black/30 border border-white/10 rounded-lg px-2 py-1 text-white outline-none focus:border-[var(--accent)]"
+                  />
+                </h2>
+              </div>
+              {matchesData.length === 0 ? (
+                <div className="glass-panel p-10 text-center text-gray-500">Nenhum jogo programado para esta data.</div>
+              ) : (
+                <div className="premium-grid">
+                  {matchesData.map((ev, index) => (
+                    <div 
+                      key={ev.id} 
+                      className="cursor-pointer hover:-translate-y-1 transition duration-300 scoreboard-enter" 
+                      style={{ '--stagger-idx': index }}
+                      onClick={() => setSelectedMatchId(ev.id)}
+                    >
+                      <ScoreboardCard event={ev} league={leagueConfig} />
                     </div>
                   ))}
                 </div>
               )}
-
-              {view === 'news' && (
-                <div className="max-w-6xl mx-auto">
-                  <h2 className="text-xl font-bold text-[var(--text-primary)] mb-6">Últimas Notícias</h2>
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {newsData.length === 0 ? <div className="text-gray-500">Sem notícias no momento.</div> : newsData.map((n, i) => (
-                      <a key={i} href={n.links?.web?.href} target="_blank" rel="noreferrer" className="glass-panel group block hover:-translate-y-1 transition duration-300">
-                        <div className="aspect-video w-full overflow-hidden border-b border-[var(--border-color)] bg-black/50">
-                          {n.images?.[0]?.url && <img src={n.images[0].url} alt="" className="w-full h-full object-cover group-hover:scale-105 transition duration-500" />}
-                        </div>
-                        <div className="p-4 flex flex-col h-full">
-                          <h3 className="font-bold text-lg leading-snug group-hover:text-[var(--accent)] transition mb-4">{n.headline}</h3>
-                          <p className="mt-auto text-xs text-gray-500 flex items-center gap-1"><Clock size={12} /> {n.published || 'Recente'}</p>
-                        </div>
-                      </a>
-                    ))}
-                  </div>
-                </div>
-              )}
-
-              {view === 'clubs' && <WikiSearch />}
-            </>
+            </div>
           )}
-        </div>
 
-        {/* Bottom Navigation for Mobile */}
-        <nav className="bottom-nav md:hidden flex justify-around items-center bg-[var(--nav-bg)] backdrop-blur-md border border-[var(--border-color)] fixed bottom-6 left-[5%] right-[5%] py-3 px-6 rounded-full shadow-2xl z-50">
-          {sportConfig.views.map(v => (
-            <button
-              key={v.id}
-              onClick={() => setView(v.id)}
-              className={`flex flex-col items-center gap-1 text-[10px] transition ${view === v.id ? 'text-[var(--accent)] font-bold' : 'text-[var(--text-muted)]'}`}
-            >
-              {v.icon}
-              <span>{v.name.split(' ')[0]}</span>
-            </button>
-          ))}
-        </nav>
-      </main>
+          {view === 'standings' && standingsData && (
+            <div className="max-w-4xl mx-auto">
+              <h2 className="text-xl font-bold text-[var(--text-primary)] mb-6">Classificação</h2>
+              {standingsData.children?.map((group, idx) => (
+                <div key={idx} className="cbf-standings-card mb-8">
+                  <div className="cbf-standings-header">
+                    <div>#</div><div className="text-left">Clube</div><div className="text-center">Pts</div>
+                    <div className="text-center hidden sm:block">J</div><div className="text-center hidden sm:block">V</div>
+                    <div className="text-center hidden sm:block">E</div><div className="text-center hidden sm:block">D</div>
+                    <div className="text-center hidden sm:block">SG</div><div className="text-center">%</div>
+                  </div>
+                  {group.standings?.entries?.map((row, rIdx) => {
+                    const val = n => row.stats.find(s => s.name === n)?.value || 0;
+                    const points = val('points');
+                    const gp = val('gamesPlayed');
+                    return (
+                      <div key={row.team.id} className={`cbf-standings-row`}>
+                        <div className={`cbf-rank-cell ${getZoneClass(row.note)}`}><span>{val('rank')}</span></div>
+                        <div className="cbf-team-cell">
+                          <img src={row.team.logos?.[0]?.href} alt="" />
+                          <span className="truncate text-sm">{row.team.shortDisplayName}</span>
+                        </div>
+                        <span className="cbf-points-cell">{points}</span>
+                        <span className="cbf-stats-cell hidden sm:block">{gp}</span>
+                        <span className="cbf-stats-cell hidden sm:block">{val('wins')}</span>
+                        <span className="cbf-stats-cell hidden sm:block">{val('ties')}</span>
+                        <span className="cbf-stats-cell hidden sm:block">{val('losses')}</span>
+                        <span className="cbf-stats-cell hidden sm:block">{val('pointDifferential')}</span>
+                        <span className="cbf-stats-cell text-xs">{gp > 0 ? Math.round((points / (gp * 3)) * 100) : 0}%</span>
+                      </div>
+                    );
+                  })}
+                </div>
+              ))}
+            </div>
+          )}
+
+          {view === 'news' && (
+            <div className="max-w-6xl mx-auto">
+              <h2 className="text-xl font-bold text-[var(--text-primary)] mb-6">Últimas Notícias</h2>
+              <div className="news-widget-grid">
+                {newsData.length === 0 ? <div className="text-gray-500">Sem notícias no momento.</div> : newsData.map((n, i) => (
+                  <div key={i} onClick={() => setSelectedNewsArticle(n)} className={`glass-panel group relative overflow-hidden flex flex-col cursor-pointer transition duration-300 hover:shadow-2xl hover:shadow-[var(--accent)]/20 hover:-translate-y-1 ${i === 0 ? 'news-hero' : 'news-item'}`}>
+                    <div className="news-img-wrapper w-full overflow-hidden bg-black/50 absolute inset-0 z-0">
+                      {n.images?.[0]?.url && <img src={n.images[0].url} alt="" className="w-full h-full object-cover group-hover:scale-110 transition duration-700 opacity-60 group-hover:opacity-80" />}
+                      <div className="absolute inset-0 bg-gradient-to-t from-[var(--bg-primary)] via-[var(--bg-primary)]/80 to-transparent"></div>
+                    </div>
+                    <div className="p-5 flex flex-col h-full relative z-10 mt-auto">
+                      <div className="mt-auto">
+                        <p className="text-xs font-bold text-[var(--accent)] flex items-center gap-1 mb-2 uppercase tracking-wider"><Clock size={12} /> {n.published ? new Date(n.published).toLocaleDateString() : 'Recente'}</p>
+                        <h3 className={`font-bold leading-snug text-[var(--text-primary)] transition ${i === 0 ? 'text-2xl md:text-3xl' : 'text-lg'}`}>{n.headline}</h3>
+                        {i === 0 && <p className="text-sm text-[var(--text-muted)] line-clamp-3 mt-3">{n.description}</p>}
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {view === 'scorers' && (
+            <div className="max-w-4xl mx-auto mb-10">
+              <h2 className="text-xl font-bold text-[var(--text-primary)] mb-12">Artilharia</h2>
+              
+              {scorersData && scorersData.length >= 3 ? (
+                <>
+                  <div className="podium-container">
+                    {/* Posição 2 */}
+                    <div className="podium-item podium-2 animate-in slide-in-from-bottom-8 duration-700 delay-100 fill-mode-both">
+                      <div className="podium-player">
+                        <WikiPlayerImage playerName={scorersData[1].athlete.displayName} defaultImage={scorersData[1].athlete.headshot?.href} alt={scorersData[1].athlete.displayName} />
+                        {scorersData[1].team?.logos?.[0]?.href && <div className="podium-team-logo"><img src={scorersData[1].team.logos[0].href} alt=""/></div>}
+                      </div>
+                      <div className="podium-base base-2">
+                        <span className="podium-rank">2º</span>
+                        <span className="podium-name">{scorersData[1].athlete.shortName}</span>
+                        <span className="podium-goals">{scorersData[1].value} gols</span>
+                      </div>
+                    </div>
+                    
+                    {/* Posição 1 */}
+                    <div className="podium-item podium-1 animate-in slide-in-from-bottom-12 duration-700 fill-mode-both">
+                      <div className="podium-player">
+                        <div className="podium-crown">👑</div>
+                        <WikiPlayerImage playerName={scorersData[0].athlete.displayName} defaultImage={scorersData[0].athlete.headshot?.href} alt={scorersData[0].athlete.displayName} />
+                        {scorersData[0].team?.logos?.[0]?.href && <div className="podium-team-logo"><img src={scorersData[0].team.logos[0].href} alt=""/></div>}
+                      </div>
+                      <div className="podium-base base-1">
+                        <span className="podium-rank">1º</span>
+                        <span className="podium-name">{scorersData[0].athlete.shortName}</span>
+                        <span className="podium-goals">{scorersData[0].value} gols</span>
+                      </div>
+                    </div>
+                    
+                    {/* Posição 3 */}
+                    <div className="podium-item podium-3 animate-in slide-in-from-bottom-4 duration-700 delay-200 fill-mode-both">
+                      <div className="podium-player">
+                        <WikiPlayerImage playerName={scorersData[2].athlete.displayName} defaultImage={scorersData[2].athlete.headshot?.href} alt={scorersData[2].athlete.displayName} />
+                        {scorersData[2].team?.logos?.[0]?.href && <div className="podium-team-logo"><img src={scorersData[2].team.logos[0].href} alt=""/></div>}
+                      </div>
+                      <div className="podium-base base-3">
+                        <span className="podium-rank">3º</span>
+                        <span className="podium-name">{scorersData[2].athlete.shortName}</span>
+                        <span className="podium-goals">{scorersData[2].value} gols</span>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  {/* Restante dos artilheiros */}
+                  {scorersData.length > 3 && (
+                    <div className="mt-8 glass-panel p-2 animate-in fade-in duration-1000 delay-300 fill-mode-both">
+                      {scorersData.slice(3, 10).map((scorer, i) => (
+                        <div key={i} className="flex items-center justify-between p-4 border-b border-[var(--border-color)] last:border-0 hover:bg-[var(--hover-bg)] transition rounded-xl">
+                          <div className="flex items-center gap-4">
+                            <span className="text-lg font-bold text-[var(--text-muted)] w-6 text-center">{i + 4}º</span>
+                            <WikiPlayerImage playerName={scorer.athlete.displayName} defaultImage={scorer.athlete.headshot?.href} className="w-12 h-12 rounded-full object-cover bg-[var(--bg-primary)] border border-[var(--border-color)]" alt="" />
+                            <div>
+                              <p className="font-bold text-[var(--text-primary)]">{scorer.athlete.displayName}</p>
+                              <div className="flex items-center gap-2 mt-1">
+                                {scorer.team?.logos?.[0]?.href && <img src={scorer.team.logos[0].href} className="w-4 h-4 object-contain" alt=""/>}
+                                <span className="text-xs text-[var(--text-muted)]">{scorer.team?.displayName || scorer.team?.name}</span>
+                              </div>
+                            </div>
+                          </div>
+                          <div className="text-xl font-bold text-[var(--text-primary)]">{scorer.value} <span className="text-xs text-[var(--text-muted)] font-normal">gols</span></div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </>
+              ) : (
+                <div className="glass-panel p-10 text-center text-[var(--text-muted)]">Carregando artilheiros ou dados indisponíveis para esta liga...</div>
+              )}
+            </div>
+          )}
+
+          {view === 'transmission' && (
+            <div className="max-w-6xl mx-auto mb-10">
+              <h2 className="text-xl font-bold text-[var(--text-primary)] mb-8 flex items-center gap-2">
+                <Tv2 className="text-red-500" /> Transmissões Ao Vivo
+              </h2>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {transmissionData.length === 0 && !loading ? (
+                  <div className="col-span-full glass-panel p-10 text-center text-[var(--text-muted)]">Nenhuma transmissão disponível no momento.</div>
+                ) : (
+                  transmissionData.map((event) => (
+                    <div key={event.id} onClick={() => { setSelectedTransmission(event); setActiveEmbedIndex(0); }} className="glass-panel group relative overflow-hidden flex flex-col cursor-pointer transition duration-300 hover:shadow-2xl hover:shadow-red-500/20 hover:-translate-y-1">
+                      <div className="aspect-video w-full overflow-hidden bg-black/50 relative">
+                        {event.poster && <img src={event.poster} alt={event.title} className="w-full h-full object-cover group-hover:scale-105 transition duration-500 opacity-80" />}
+                        <div className="absolute top-2 left-2 bg-red-600 text-white text-xs font-bold px-2 py-1 rounded animate-pulse shadow-lg">
+                          {event.status === 'live' ? 'AO VIVO' : 'EM BREVE'}
+                        </div>
+                        <div className="absolute bottom-2 right-2 bg-black/60 text-white text-xs font-bold px-2 py-1 rounded backdrop-blur-md">
+                          {new Date(event.start_timestamp * 1000).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}
+                        </div>
+                      </div>
+                      <div className="p-4 flex flex-col h-full bg-[var(--bg-primary)]">
+                        <p className="text-xs font-bold text-[var(--accent)] mb-1 uppercase tracking-wider">{event.competition}</p>
+                        <h3 className="font-bold text-lg leading-snug text-[var(--text-primary)] group-hover:text-red-500 transition line-clamp-2">{event.title}</h3>
+                      </div>
+                    </div>
+                  ))
+                )}
+              </div>
+            </div>
+          )}
+
+          {view === 'clubs' && <WikiSearch />}
+          
+          {/* Transmission Player Modal */}
+          {selectedTransmission && (
+            <div className="fixed inset-0 z-[70] flex items-center justify-center p-0 md:p-4 bg-black/90 backdrop-blur-md" onClick={() => setSelectedTransmission(null)}>
+              <div className="bg-[#0f0f13] border border-white/10 md:rounded-2xl w-full h-full md:h-auto max-w-5xl flex flex-col shadow-2xl relative animate-in fade-in zoom-in duration-300 overflow-hidden" onClick={e => e.stopPropagation()}>
+                
+                <div className="flex items-center justify-between p-4 border-b border-white/10 bg-black/40">
+                  <h3 className="font-bold text-white flex items-center gap-2">
+                    <span className="w-2 h-2 rounded-full bg-red-500 animate-pulse"></span>
+                    {selectedTransmission.title}
+                  </h3>
+                  <button onClick={() => setSelectedTransmission(null)} className="w-8 h-8 rounded-full bg-white/10 hover:bg-red-500 text-white flex items-center justify-center transition">
+                    <X size={18} />
+                  </button>
+                </div>
+                
+                <div className="w-full aspect-video bg-black relative">
+                  {selectedTransmission.embeds && selectedTransmission.embeds.length > 0 ? (
+                    <iframe 
+                      src={selectedTransmission.embeds[activeEmbedIndex].embed_url} 
+                      className="w-full h-full absolute inset-0"
+                      allowFullScreen 
+                      frameBorder="0"
+                      scrolling="no"
+                      allow="encrypted-media"
+                    ></iframe>
+                  ) : (
+                    <div className="w-full h-full flex items-center justify-center text-gray-500">Transmissão indisponível</div>
+                  )}
+                </div>
+                
+                <div className="p-4 bg-[#0f0f13] flex flex-wrap gap-2">
+                  {selectedTransmission.embeds?.map((embed, idx) => (
+                    <button 
+                      key={idx}
+                      onClick={() => setActiveEmbedIndex(idx)}
+                      className={`px-4 py-2 rounded-lg text-sm font-bold transition ${activeEmbedIndex === idx ? 'bg-red-600 text-white shadow-lg shadow-red-500/20' : 'bg-white/5 text-gray-400 hover:bg-white/10 hover:text-white'}`}
+                    >
+                      {embed.provider} ({embed.quality})
+                    </button>
+                  ))}
+                </div>
+                
+              </div>
+            </div>
+          )}
+          
+          {selectedNewsArticle && (
+            <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/60 backdrop-blur-md" onClick={() => setSelectedNewsArticle(null)}>
+              <div className="bg-[var(--bg-primary)] border border-[var(--border-color)] rounded-2xl w-full max-w-3xl max-h-[90vh] overflow-y-auto shadow-2xl relative animate-in fade-in zoom-in duration-300" onClick={e => e.stopPropagation()}>
+                <button 
+                  onClick={() => setSelectedNewsArticle(null)}
+                  className="absolute top-4 right-4 w-10 h-10 bg-black/50 hover:bg-[var(--accent)] rounded-full flex items-center justify-center text-white z-10 transition backdrop-blur-md"
+                >
+                  <X size={20} />
+                </button>
+                {selectedNewsArticle.images?.[0]?.url && (
+                  <div className="w-full h-64 md:h-96 relative">
+                    <img src={selectedNewsArticle.images[0].url} alt="" className="w-full h-full object-cover" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-[var(--bg-primary)] via-[var(--bg-primary)]/40 to-transparent"></div>
+                  </div>
+                )}
+                <div className={`p-6 md:p-10 ${selectedNewsArticle.images?.[0]?.url ? '-mt-24 relative z-10' : ''}`}>
+                  <p className="text-sm font-bold text-[var(--accent)] flex items-center gap-2 mb-3 uppercase tracking-wider"><Clock size={14} /> {selectedNewsArticle.published ? new Date(selectedNewsArticle.published).toLocaleDateString() : 'Recente'}</p>
+                  <h2 className="text-2xl md:text-4xl font-black text-[var(--text-primary)] mb-6 leading-tight">{selectedNewsArticle.headline}</h2>
+                  <div className="text-[var(--text-secondary)] text-lg leading-relaxed mb-8 space-y-4" dangerouslySetInnerHTML={{ __html: selectedNewsArticle.story || selectedNewsArticle.description }} />
+                  
+                  {selectedNewsArticle.links?.web?.href && (
+                    <a href={selectedNewsArticle.links.web.href} target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 bg-[var(--accent)] hover:bg-blue-600 text-white font-bold py-4 px-8 rounded-xl transition shadow-xl shadow-[var(--accent)]/30">
+                      Ler Artigo Completo na ESPN <ExternalLink size={20} />
+                    </a>
+                  )}
+                </div>
+              </div>
+            </div>
+          )}
+        </>
+      )}
     </div>
+  );
+
+  return (
+    <PremiumWebInterface
+      theme={theme}
+      setTheme={setTheme}
+      sportConfig={sportConfig}
+      leagueConfig={leagueConfig}
+      currentLeague={currentLeague}
+      setCurrentLeague={setCurrentLeague}
+      view={view}
+      setView={setView}
+    >
+      {mainContent}
+    </PremiumWebInterface>
   );
 }
