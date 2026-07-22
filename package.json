@@ -9,10 +9,18 @@
     "web": "expo start --web"
   },
   "dependencies": {
+    "babel-preset-expo": "54.0.12",
     "expo": "~54.0.35",
     "expo-status-bar": "~3.0.9",
+    "lucide-react-native": "^1.25.0",
+    "nativewind": "^4.2.6",
     "react": "19.1.0",
-    "react-native": "0.81.5"
+    "react-dom": "19.1.0",
+    "react-native": "0.81.5",
+    "react-native-reanimated": "~4.1.1",
+    "react-native-web": "^0.21.0",
+    "react-native-worklets": "0.5.1",
+    "tailwindcss": "^3.3.2"
   },
   "private": true
 }
