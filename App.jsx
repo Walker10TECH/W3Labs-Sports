@@ -1300,7 +1300,7 @@ export default function App() {
                   )}
                 </div>
                 
-                <div className="p-4 bg-[#0f0f13] flex flex-wrap gap-2">
+                <div className="p-4 bg-black/40 border-t border-white/5 flex flex-wrap gap-2">
                   {selectedTransmission.embeds?.map((embed, idx) => (
                     <button 
                       key={idx}
@@ -1318,7 +1318,7 @@ export default function App() {
           
           {selectedNewsArticle && (
             <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/60 backdrop-blur-md" onClick={() => setSelectedNewsArticle(null)}>
-              <div className="bg-[var(--bg-primary)] border border-[var(--border-color)] rounded-2xl w-full max-w-3xl max-h-[90vh] overflow-y-auto shadow-2xl relative animate-in fade-in zoom-in duration-300" onClick={e => e.stopPropagation()}>
+              <div className="glass-panel w-full max-w-3xl max-h-[90vh] overflow-y-auto relative animate-in fade-in zoom-in duration-300" onClick={e => e.stopPropagation()}>
                 <button 
                   onClick={() => setSelectedNewsArticle(null)}
                   className="absolute top-4 right-4 w-10 h-10 bg-black/50 hover:bg-[var(--accent)] rounded-full flex items-center justify-center text-white z-10 transition backdrop-blur-md"
