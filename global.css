@@ -3995,3 +3995,56 @@ body {
     font-weight: bold;
     margin-top: 4px;
 }
+
+/* ==================================================
+   SMART TV MODE (D-Pad Navigation & 4K Scale)
+   ================================================== */
+
+/* Universal Focus for Smart TV Remote (D-Pad) */
+button:focus-visible, 
+a:focus-visible, 
+[tabindex]:focus-visible,
+.premium-nav-item:focus-visible,
+.match-card:focus-visible {
+    outline: none !important;
+    box-shadow: 0 0 0 4px var(--accent), 0 0 20px rgba(var(--accent-rgb), 0.8) !important;
+    transform: scale(1.05) !important;
+    transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.2s ease !important;
+    border-radius: inherit;
+    z-index: 110;
+    border-color: var(--accent) !important;
+}
+
+/* TV Overlay focus for transmission servers */
+.fixed .bg-gradient-to-br.from-red-600:focus-visible {
+    box-shadow: 0 0 0 4px white, 0 0 30px rgba(255, 0, 0, 1) !important;
+}
+
+/* 1440p / Large Desktop TV Mode */
+@media (min-width: 1440px) {
+    html {
+        font-size: 85%; /* Escalamento geral da UI */
+    }
+    .premium-grid {
+        grid-template-columns: repeat(auto-fit, minmax(460px, 1fr));
+    }
+    .glass-panel {
+        padding: 32px;
+    }
+}
+
+/* 4K TV Mode */
+@media (min-width: 1920px) {
+    html {
+        font-size: 110%; /* Tudo fica gigante de forma proporcional */
+    }
+    .premium-grid {
+        grid-template-columns: repeat(auto-fit, minmax(580px, 1fr));
+        gap: 40px;
+    }
+    .cbf-scoreboard-wrapper,
+    .br-widget-container,
+    .ga-widget-container {
+        transform: scale(1.2); /* Aumenta os placares CSS */
+    }
+}

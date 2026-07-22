@@ -1012,9 +1012,15 @@ export default function App() {
           const data = await res.json();
           setMatchesData(data.events || []);
         } else if (view === 'standings') {
-          const res = await fetch(API_CONFIG.espn.standings(leagueConfig.id));
-          const data = await res.json();
-          setStandingsData(data);
+          const dateStr = API_CONFIG.utils.formatDateForEspn(currentDate);
+          const [standingsRes, matchesRes] = await Promise.all([
+            fetch(API_CONFIG.espn.standings(leagueConfig.id)),
+            fetch(API_CONFIG.espn.scoreboard(currentSport, leagueConfig.id, dateStr))
+          ]);
+          const standingsJson = await standingsRes.json();
+          const matchesJson = await matchesRes.json();
+          setStandingsData(standingsJson);
+          setMatchesData(matchesJson.events || []);
         } else if (view === 'news') {
           const res = await fetch(API_CONFIG.espn.news(currentSport, leagueConfig.id));
           const data = await res.json();
@@ -1038,10 +1044,10 @@ export default function App() {
     loadData();
   }, [view, currentLeague, currentDate]);
 
-  // Live update interval for matches
+  // Live update interval for matches and standings
   useEffect(() => {
     let interval;
-    if (view === 'matches' && matchesData.some(e => e.status?.type?.state === 'in')) {
+    if ((view === 'matches' || view === 'standings') && matchesData.some(e => e.status?.type?.state === 'in')) {
       interval = setInterval(async () => {
         try {
           const dateStr = API_CONFIG.utils.formatDateForEspn(currentDate);
@@ -1053,6 +1059,73 @@ export default function App() {
     }
     return () => clearInterval(interval);
   }, [view, matchesData, currentLeague, currentDate]);
+
+  // Live Standings Algorithm
+  const liveStandings = React.useMemo(() => {
+    if (!standingsData || !standingsData.children) return null;
+    
+    // Deep clone standings to avoid mutating state directly
+    let newStandings = JSON.parse(JSON.stringify(standingsData));
+    
+    // Find all 'in' progress matches
+    const liveMatches = matchesData.filter(m => m.status?.type?.state === 'in');
+    if (liveMatches.length === 0) return newStandings;
+
+    liveMatches.forEach(match => {
+      const comp = match.competitions[0];
+      const home = comp.competitors.find(c => c.homeAway === 'home');
+      const away = comp.competitors.find(c => c.homeAway === 'away');
+      const homeScore = parseInt(home.score) || 0;
+      const awayScore = parseInt(away.score) || 0;
+
+      let homePts = 0, awayPts = 0;
+      if (homeScore > awayScore) homePts = 3;
+      else if (homeScore < awayScore) awayPts = 3;
+      else { homePts = 1; awayPts = 1; }
+
+      const homeId = home.team.id;
+      const awayId = away.team.id;
+
+      newStandings.children.forEach(group => {
+        if (!group.standings || !group.standings.entries) return;
+        
+        const updateTeam = (teamId, pts, goalsFor, goalsAgainst) => {
+          const entry = group.standings.entries.find(e => e.team.id === teamId);
+          if (entry) {
+            entry.isLive = true; // flag to highlight in UI
+            const getStat = (name) => entry.stats.find(s => s.name === name);
+            const addStat = (name, val) => { const s = getStat(name); if(s) s.value += val; };
+            
+            addStat('points', pts);
+            addStat('gamesPlayed', 1);
+            if (pts === 3) addStat('wins', 1);
+            else if (pts === 1) addStat('ties', 1);
+            else addStat('losses', 1);
+            addStat('pointDifferential', goalsFor - goalsAgainst);
+          }
+        };
+
+        updateTeam(homeId, homePts, homeScore, awayScore);
+        updateTeam(awayId, awayPts, awayScore, homeScore);
+
+        // Re-sort the entries with the new live points
+        group.standings.entries.sort((a, b) => {
+          const val = (entry, name) => entry.stats.find(s => s.name === name)?.value || 0;
+          if (val(b, 'points') !== val(a, 'points')) return val(b, 'points') - val(a, 'points');
+          if (val(b, 'wins') !== val(a, 'wins')) return val(b, 'wins') - val(a, 'wins');
+          return val(b, 'pointDifferential') - val(a, 'pointDifferential');
+        });
+
+        // Re-assign ranks
+        group.standings.entries.forEach((e, idx) => {
+          const rankStat = e.stats.find(s => s.name === 'rank');
+          if (rankStat) rankStat.value = idx + 1;
+        });
+      });
+    });
+
+    return newStandings;
+  }, [standingsData, matchesData]);
 
   const mainContent = (
     <div id="main-scroll" className="feed-post p-2 md:p-4">
@@ -1100,10 +1173,17 @@ export default function App() {
             </div>
           )}
 
-          {view === 'standings' && standingsData && (
+          {view === 'standings' && liveStandings && (
             <div className="max-w-4xl mx-auto">
-              <h2 className="text-xl font-bold text-[var(--text-primary)] mb-6">Classificação</h2>
-              {standingsData.children?.map((group, idx) => (
+              <div className="flex items-center justify-between mb-6">
+                <h2 className="text-xl font-bold text-[var(--text-primary)]">Classificação</h2>
+                {matchesData.some(m => m.status?.type?.state === 'in') && (
+                  <span className="bg-red-500/20 text-red-500 text-xs font-bold px-3 py-1 rounded-full border border-red-500/30 flex items-center gap-2 animate-pulse">
+                    <span className="w-2 h-2 bg-red-500 rounded-full"></span> LIVE
+                  </span>
+                )}
+              </div>
+              {liveStandings.children?.map((group, idx) => (
                 <div key={idx} className="cbf-standings-card mb-8">
                   <div className="cbf-standings-header">
                     <div>#</div><div className="text-left">Clube</div><div className="text-center">Pts</div>
@@ -1116,13 +1196,13 @@ export default function App() {
                     const points = val('points');
                     const gp = val('gamesPlayed');
                     return (
-                      <div key={row.team.id} className={`cbf-standings-row`}>
+                      <div key={row.team.id} className={`cbf-standings-row ${row.isLive ? 'bg-red-500/10 border-l-2 border-red-500' : ''}`}>
                         <div className={`cbf-rank-cell ${getZoneClass(row.note)}`}><span>{val('rank')}</span></div>
                         <div className="cbf-team-cell">
-                          <img src={row.team.logos?.[0]?.href} alt="" />
-                          <span className="truncate text-sm">{row.team.shortDisplayName}</span>
+                          <img src={row.team.logos?.[0]?.href} alt="" className={row.isLive ? 'animate-pulse' : ''} />
+                          <span className={`truncate text-sm ${row.isLive ? 'text-red-400 font-bold' : ''}`}>{row.team.shortDisplayName}</span>
                         </div>
-                        <span className="cbf-points-cell">{points}</span>
+                        <span className={`cbf-points-cell ${row.isLive ? 'text-red-400' : ''}`}>{points}</span>
                         <span className="cbf-stats-cell hidden sm:block">{gp}</span>
                         <span className="cbf-stats-cell hidden sm:block">{val('wins')}</span>
                         <span className="cbf-stats-cell hidden sm:block">{val('ties')}</span>
@@ -1270,49 +1350,82 @@ export default function App() {
 
           {view === 'clubs' && <WikiSearch />}
           
-          {/* Transmission Player Modal */}
+          {/* TV-style Cinema Player Modal */}
           {selectedTransmission && (
-            <div className="fixed inset-0 z-[70] flex items-center justify-center p-0 md:p-4 bg-black/90 backdrop-blur-md" onClick={() => setSelectedTransmission(null)}>
-              <div className="bg-[#0f0f13] border border-white/10 md:rounded-2xl w-full h-full md:h-auto max-w-5xl flex flex-col shadow-2xl relative animate-in fade-in zoom-in duration-300 overflow-hidden" onClick={e => e.stopPropagation()}>
-                
-                <div className="flex items-center justify-between p-4 border-b border-white/10 bg-black/40">
-                  <h3 className="font-bold text-white flex items-center gap-2">
-                    <span className="w-2 h-2 rounded-full bg-red-500 animate-pulse"></span>
+            <div className="fixed inset-0 z-[100] flex flex-col bg-black overflow-hidden animate-in fade-in duration-500">
+              {/* Header Overlay */}
+              <div className="absolute top-0 left-0 right-0 p-6 md:p-8 flex justify-between items-start z-10 bg-gradient-to-b from-black/90 via-black/50 to-transparent pointer-events-none">
+                <div className="pointer-events-auto">
+                  <h3 className="font-bold text-2xl md:text-3xl text-white flex items-center gap-3 drop-shadow-lg">
+                    <span className="w-3 h-3 rounded-full bg-red-600 animate-pulse shadow-[0_0_10px_rgba(220,38,38,0.8)]"></span>
                     {selectedTransmission.title}
                   </h3>
-                  <button onClick={() => setSelectedTransmission(null)} className="w-8 h-8 rounded-full bg-white/10 hover:bg-red-500 text-white flex items-center justify-center transition">
-                    <X size={18} />
-                  </button>
+                  <p className="text-gray-300 text-sm md:text-base mt-1 drop-shadow-md">Transmissão ao vivo • Selecione o servidor abaixo se o vídeo falhar</p>
                 </div>
-                
-                <div className="w-full aspect-video bg-black relative">
+                <button 
+                  onClick={() => setSelectedTransmission(null)} 
+                  className="pointer-events-auto w-12 h-12 rounded-full bg-white/10 hover:bg-white/20 hover:scale-110 backdrop-blur-md text-white flex items-center justify-center transition-all shadow-lg"
+                >
+                  <X size={24} />
+                </button>
+              </div>
+              
+              {/* Main Video Area */}
+              <div className="flex-1 w-full h-full flex items-center justify-center relative pt-20 pb-32 md:pb-40">
+                <div className="w-full h-full max-w-[1800px] max-h-[100vh] aspect-video bg-[#0a0a0a] relative md:rounded-2xl overflow-hidden shadow-[0_0_50px_rgba(0,0,0,0.8)] border border-white/5">
                   {selectedTransmission.embeds && selectedTransmission.embeds.length > 0 ? (
                     <iframe 
                       src={selectedTransmission.embeds[activeEmbedIndex].embed_url} 
-                      className="w-full h-full absolute inset-0"
+                      className="w-full h-full absolute inset-0 object-contain"
                       allowFullScreen 
                       frameBorder="0"
                       scrolling="no"
                       allow="encrypted-media"
                     ></iframe>
                   ) : (
-                    <div className="w-full h-full flex items-center justify-center text-gray-500">Transmissão indisponível</div>
+                    <div className="w-full h-full flex flex-col items-center justify-center text-gray-500 gap-4">
+                      <Tv2 size={48} className="opacity-20" />
+                      <p className="text-xl">Nenhum sinal disponível no momento</p>
+                    </div>
                   )}
                 </div>
-                
-                <div className="p-4 bg-black/40 border-t border-white/5 flex flex-wrap gap-2">
-                  {selectedTransmission.embeds?.map((embed, idx) => (
-                    <button 
-                      key={idx}
-                      onClick={() => setActiveEmbedIndex(idx)}
-                      className={`px-4 py-2 rounded-lg text-sm font-bold transition ${activeEmbedIndex === idx ? 'bg-red-600 text-white shadow-lg shadow-red-500/20' : 'bg-white/5 text-gray-400 hover:bg-white/10 hover:text-white'}`}
-                    >
-                      {embed.provider} ({embed.quality})
-                    </button>
-                  ))}
-                </div>
-                
               </div>
+              
+              {/* TV-style Server Selector */}
+              <div className="absolute bottom-0 left-0 right-0 p-6 md:p-10 pb-8 md:pb-12 bg-gradient-to-t from-black via-black/90 to-transparent z-10 flex flex-col items-center">
+                <p className="text-gray-400 text-sm font-bold uppercase tracking-[0.2em] mb-4 text-center">Servidores Disponíveis</p>
+                <div className="flex flex-wrap justify-center gap-3 md:gap-4 max-w-5xl w-full">
+                  {selectedTransmission.embeds?.map((embed, idx) => {
+                    const isActive = activeEmbedIndex === idx;
+                    return (
+                      <button 
+                        key={idx}
+                        onClick={() => setActiveEmbedIndex(idx)}
+                        className={`
+                          relative group overflow-hidden rounded-xl md:rounded-2xl px-6 py-4 md:py-5 min-w-[140px] md:min-w-[180px]
+                          flex flex-col items-center justify-center gap-2 transition-all duration-300 transform
+                          ${isActive 
+                            ? 'bg-gradient-to-br from-red-600 to-red-800 scale-105 shadow-[0_10px_30px_rgba(220,38,38,0.4)] border border-red-500/50' 
+                            : 'bg-white/5 hover:bg-white/10 hover:scale-105 border border-white/10 hover:border-white/30 backdrop-blur-md'
+                          }
+                        `}
+                      >
+                        <span className={`text-lg md:text-xl font-black ${isActive ? 'text-white' : 'text-gray-200'}`}>
+                          Opção {idx + 1}
+                        </span>
+                        <span className={`text-xs md:text-sm font-bold tracking-wide ${isActive ? 'text-red-200' : 'text-gray-500 group-hover:text-gray-300'}`}>
+                          {embed.provider || embed.quality || 'Auto'}
+                        </span>
+                        
+                        {isActive && (
+                          <div className="absolute inset-0 border-2 border-white/20 rounded-xl md:rounded-2xl pointer-events-none animate-pulse"></div>
+                        )}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+              
             </div>
           )}
           
