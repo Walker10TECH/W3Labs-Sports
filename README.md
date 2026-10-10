@@ -1,99 +1,327 @@
-# W3Labs Sports - Painel de Dados Esportivos
+# 🏆 W3Labs Sports — v2.0
 
-##  Visão Geral
+> Plataforma web moderna de acompanhamento esportivo com placares ao vivo, animações customizadas por campeonato, tabelas de classificação, artilharia, notícias e transmissões — tudo em um único painel responsivo.
 
-O W3Labs Sports é uma aplicação web de página única (SPA - Single Page Application) projetada para exibir dados esportivos de forma dinâmica e interativa. Construído com HTML, CSS e JavaScript puros, o projeto consome múltiplas APIs para fornecer informações em tempo real sobre partidas de futebol e Fórmula 1, com animações de eventos, placares dinâmicos, classificações, notícias e muito mais.
+![Versão](https://img.shields.io/badge/versão-2.0.0-blue)
+![Status](https://img.shields.io/badge/status-ativo-success)
+![Licença](https://img.shields.io/badge/licença-MIT-green)
 
-A interface é moderna, utilizando o conceito de "glassmorphism", e é totalmente responsiva, adaptando-se desde telas de smartphones ultrapequenos até monitores ultrawide.
+---
 
-## ✨ Funcionalidades Principais
+## 📖 Sobre
 
--   **Dois Esportes Suportados:** Futebol e Fórmula 1, com navegação e visualizações específicas para cada um.
--   **Placar de Transmissão Unificado:**
-    -   Um placar de jogo inspirado em transmissões de TV, com cores e logos dos times, placar central e um cronômetro dinâmico.
-    -   **Animações de Eventos em Tempo Real:** Overlays e animações são acionados para gols, cartões (amarelo/vermelho), substituições e checagens do VAR, enriquecendo a experiência ao vivo.
--   **Responsividade Avançada:** Layout otimizado para mais de 6 breakpoints diferentes, incluindo ajustes para modo paisagem em dispositivos móveis.
--   **Navegação Completa:**
-    -   **Desktop:** Header com menus dropdown e uma barra lateral (sidebar) para navegação entre as visualizações.
-    -   **Mobile:** Menu de navegação inferior fixo para acesso rápido às principais seções.
--   **Visualizações de Dados (Futebol):**
-    -   **Jogos:** Exibe as partidas do dia (com um seletor de data) e um indicador de "AO VIVO".
-    -   **Classificação:** Tabela de classificação completa com zonas coloridas (ex: Libertadores, Rebaixamento) e legenda.
-    -   **Artilharia:** Lista dos maiores artilheiros da temporada (com seletor de ano), consumindo uma API externa.
-    -   **Notícias:** Grade com as últimas notícias relacionadas à liga selecionada.
-    -   **Clubes:** Grade com todos os clubes da liga, que leva a uma **página dedicada por time**, exibindo calendário de jogos e elenco completo.
--   **Visualizações de Dados (Fórmula 1):**
-    -   **Calendário:** Exibe todas as corridas da temporada.
-    -   **Mundial de Pilotos:** Tabela de classificação dos pilotos.
-    -   **Mundial de Construtores:** Tabela de classificação das equipes.
-    -   **Pilotos Históricos:** Grade de pilotos lendários com busca na Wikipedia.
--   **Interatividade:**
--   **Modal de Partida Detalhado:**
-    -   **Resumo:** Placar, estatísticas detalhadas e linha do tempo com os principais eventos.
-    -   **Escalações:** Uma **visualização tática 3D** do campo, mostrando a formação dos jogadores.
-    -   **Transmissão:** Busca e exibe opções de streaming para a partida a partir de múltiplas fontes.
-    -   **Modal de Corrida (F1):** Exibe detalhes da corrida, incluindo resultados de diferentes sessões (Treino, Qualificação, Corrida) em abas.
-    -   **Busca Global:** Campo de busca no header que pesquisa jogadores e clubes em tempo real.
--   **Tematização Dinâmica:**
-    -   **Modo Claro e Escuro:** Alternância de tema com persistência no `localStorage`.
-    -   **Background por Liga:** Cada liga possui um plano de fundo temático que atualiza dinamicamente.
+O **W3Labs Sports v2.0** é uma reescrita completa da plataforma, trazendo um **Design System refinado**, **placares animados por competição**, integração com **múltiplas APIs** (ESPN, Wikipedia, ReidosCanais, OpenF1) e suporte a **Picture-in-Picture** para acompanhar partidas ao vivo em uma janela flutuante.
 
-## 🛠️ Tecnologias e Ferramentas
+O foco da versão 2.0 é entregar uma experiência visual imersiva, com identidade própria para cada campeonato (cores, tipografia, animações de gol, cartões, substituições e VAR), além de performance otimizada e suporte completo a temas claro/escuro.
 
--   **Frontend:**
-    -   `HTML5`: Estrutura semântica do conteúdo.
-    -   `CSS3`: Estilização avançada com **Variáveis CSS** para fácil tematização.
-    -   `JavaScript (ES6+)`: Toda a lógica da aplicação, manipulação do DOM e requisições a APIs.
--   **Bibliotecas e Frameworks:**
-    -   **Tailwind CSS (via CDN):** Utilizado para estilização rápida e responsiva através de classes utilitárias.
-    -   **Lucide Icons:** Biblioteca de ícones SVG.
-    -   **Flatpickr:** Componente de calendário (datepicker) leve e personalizável.
-    -   **Fontes:** `Nokia Pure Headline` (local) e Google Fonts (`Chakra Petch`, `Teko`, `Roboto Condensed`).
--   **APIs e Fontes de Dados:**
-    -   **ESPN API:** Fonte principal para placares, classificações, notícias e dados de equipes de futebol e Fórmula 1.
-    -   **API-SPORTS (APIFOOTBALL):** Utilizada especificamente para a busca de artilheiros.
-    -   **OpenF1 API:** Utilizada para classificações de pilotos e construtores de F1.
-    -   **Wikipedia API:** Utilizada para buscar e exibir informações detalhadas sobre clubes e pilotos.
-    -   **Fontes de Streaming:**
-        -   `esportesembed.top`: Fonte primária para URLs de transmissão, geradas dinamicamente.
-        -   `api.reidoscanais.io`: Fonte de fallback para aumentar a cobertura de transmissões.
-    -   **Base de Dados Interna:** O objeto `PLAYER_DB_DATA` no JavaScript serve como um banco de dados local para acelerar a busca por jogadores famosos.
+---
 
-## 📂 Estrutura do Código (Dentro de `index.html`)
+## ✨ Principais Recursos
 
-O projeto está contido em um único arquivo, dividido em três partes principais:
+### 🎨 Design System
+- **Tema escuro / claro** com transição suave e persistência via `localStorage`
+- Paleta de cores baseada em CSS Custom Properties (`--bg-primary`, `--accent`, `--card-bg`, etc.)
+- Componentes de vidro (`glass-panel`), navbar flutuante e sidebar colapsável
+- Tipografia: **Lexend**, **Montserrat**, **Oswald** e **Roboto Condensed**
 
-1.  **`<head>`:**
-    -   Importação de todas as bibliotecas externas (Tailwind, Fonts, Lucide, Flatpickr).
-    -   Definição de metatags para responsividade.
+### ⚽ Múltiplas Competições
+13 campeonatos pré-configurados, cada um com **logo, background temático, clubes e overrides de escudos**:
 
-2.  **`<style>`:**
-    -   **CSS com Variáveis (`:root`)**: O coração do sistema de temas. Define cores, fontes e outros valores para o modo escuro (padrão) e os sobrescreve na classe `.light-mode`.
-    -   **Estilos Globais e Componentes:** Estilos para `body`, scrollbar, e componentes reutilizáveis como `.glass-panel`, `.nav-pill`, modais e loaders.
-    -   **Placar Unificado e Animações:** Estilos detalhados para o placar (`.unified-broadcast-board`) e para os overlays de eventos (`.unified-full-overlay`).
-    -   **Campo Tático 3D:** CSS para a renderização do campo de futebol em perspectiva, incluindo os jogadores e marcações.
-    -   **Responsividade (`@media`)**: Media queries detalhadas que ajustam o layout para diferentes tamanhos de tela.
+| Região | Competições |
+|--------|-------------|
+| 🇧🇷 Brasil | Brasileirão Série A · Série B · Copa do Brasil · Paulistão · Cariocão · Mineiro · Gauchão |
+| 🌍 Europa | Premier League · La Liga · Serie A (ITA) · Bundesliga · Champions League |
+| 🌎 América do Sul | Libertadores |
+| 🌍 Oriente Médio | Saudi Pro League |
 
-3.  **`<body>`:**
-    -   **Estrutura HTML:** Contém os elementos principais da interface, como o header, a sidebar, o feed principal e o menu de navegação inferior.
-    -   **Views (`#view-*`)**: Cada seção principal (Jogos, Tabela, Página de Time, etc.) é um contêiner com um ID específico. A lógica JavaScript alterna a visibilidade desses contêineres.
-    -   **Modais (`#match-modal`, `#f1-race-modal`)**: Estruturas HTML para os modais, que são preenchidos e exibidos dinamicamente.
+### 📺 Placares Animados por Liga
+Cada campeonato possui um **widget de placar único**, com animações de intro, gol, cartão, substituição e VAR:
 
-4.  **`<script>`:**
-    -   **`APIFOOTBALL_KEY`**: Chave de API hardcoded para o serviço de artilheiros.
-    -   **`PLAYER_DB_DATA`**: Objeto JavaScript que funciona como um banco de dados local de jogadores.
-    -   **`SPORTS_DB`**: Objeto de configuração central. Define os esportes, ligas, visualizações, temas, logos e IDs de API para cada um. É a "fonte da verdade" para a navegação e busca de dados.
-    -   **`API_CONFIG`**: Objeto que centraliza a construção de todas as URLs de API.
-    -   **`app` (Objeto Principal):**
-        -   `state`: Mantém o estado atual da aplicação (esporte, liga, data, tema, etc.).
-        -   `init()`: Função de inicialização que configura os eventos, o tema e carrega os dados iniciais.
-        -   `fetch...()`: Funções assíncronas (`async/await`) responsáveis por buscar dados das APIs.
-        -   `render...()` e `trigger...()`: Funções que recebem dados das APIs, os transformam em HTML e disparam as animações de eventos.
-        -   **Manipuladores de Eventos:** Funções como `setView()`, `openMatch()`, `toggleTheme()`, `changeSport()` que respondem às interações do usuário.
-        -   **Cache:** Implementa um cache simples em `state` (ex: `scorersCache`, `espnTeamsCache`) para evitar requisições repetidas à API.
+- **CBF Theme** — Brasileirão A/B e Copa do Brasil (barra branca com faixas coloridas)
+- **Serie A Italiana** — placar 3D com escudo central e clip-paths diagonais
+- **Libertadores** — barra preta estilo CONMEBOL com event bar dinâmico
+- **Gauchão** — placar moderno com faixa de bandeira no rodapé
+- **Brasileirão Default** — placar clássico com overlay de GOL animado
+- **Premier League** — gradiente verde/ciano com gradiente roxo no gol
+
+### 📊 Views Disponíveis (por liga)
+- **Jogos** — scoreboard ao vivo com filtro por data (Flatpickr)
+- **Classificação** — tabela com zonas coloridas (Libertadores, Pré-Libertadores, Sul-Americana, Rebaixamento)
+- **Clubes** — grid de times com integração Wikipedia + agenda + elenco
+- **Artilharia** — top 20 goleadores via ESPN Leaders API
+- **Notícias** — últimas manchetes do ESPN
+- **Mata-Mata** — chaveamento dinâmico (bracket) para torneios eliminatórios
+
+### 🔍 Busca Global
+- Busca unificada por **clubes** e **jogadores** em tempo real
+- Integração com o banco de jogadores (`PLAYER_DB_DATA`)
+- Ações diretas: abre agenda do time ou wiki do atleta
+
+### 📺 Transmissão & PiP
+- Detecção automática de **fontes de stream** via API ReidosCanais
+- Fallback em cascata: busca por nome → eventos ao vivo → canais da categoria
+- **Picture-in-Picture** nativo (`documentPictureInPicture`) com placar em miniatura
+- **Media Session API** — controles de mídia no sistema operacional com placar e tempo em tempo real
+
+### ⏱️ Atualização ao Vivo
+- Polling automático de partidas em andamento a cada **15 segundos**
+- Timer de jogo recalculado localmente (minuto + acréscimos)
+- Detecção de eventos novos: gols, cartões, substituições e VAR
+
+---
+
+## 🛠️ Stack Tecnológica
+
+| Camada | Tecnologia |
+|--------|------------|
+| **Markup** | HTML5 semântico |
+| **Estilos** | CSS3 (Custom Properties, Grid, Flexbox, clip-path, animations) |
+| **UI Framework** | Tailwind CSS (via CDN) |
+| **Lógica** | JavaScript vanilla (ES6+), arquitetura em objeto `app` |
+| **Ícones** | [Lucide Icons](https://lucide.dev/) |
+| **Datepicker** | [Flatpickr](https://flatpickr.js.org/) com locale PT-BR |
+| **Fontes** | Google Fonts (Lexend, Montserrat, Oswald, Roboto Condensed) |
+
+---
+
+## 🔌 APIs Utilizadas
+
+```javascript
+API_CONFIG = {
+  espn:        'https://site.api.espn.com'   // Scoreboard, Standings, News, Roster, Leaders
+  wikipedia:   'https://pt.wikipedia.org'    // Wiki de clubes e jogadores
+  streaming:   'https://api.reidoscanais.si' // Fontes de transmissão
+  openF1:      'https://api.openf1.org/v1'   // (reservado para futuras modalidades)
+}
+```
+
+### Endpoints ESPN utilizados
+- `/scoreboard` — partidas por data
+- `/standings` — classificação e bracket
+- `/summary` — detalhes da partida (stats, lineups, timeline)
+- `/teams` — lista de clubes
+- `/teams/{id}/schedule` — agenda do time
+- `/teams/{id}/roster` — elenco
+- `/news` — notícias
+- `/leagues/{id}/seasons/{season}/types/1/leaders` — artilharia
+
+---
+
+## 📁 Estrutura do Projeto
+
+```
+W3Labs-Sports/
+├── index.html          # Estrutura da aplicação (header, sidebar, views, modais)
+├── style.css           # Design System completo + temas de placar por liga
+├── script.js           # Lógica principal (SPORTS_DB, API_CONFIG, objeto app)
+└── README.md           # Este arquivo
+```
+
+### Organização do `script.js`
+
+```javascript
+SPORTS_DB      // Configuração das ligas (id, apiFootballId, logo, bg, clubs, logoOverrides)
+API_CONFIG     // Endpoints centralizados das APIs
+app            // Objeto com todo o estado e métodos da aplicação
+  ├── state              // Estado global (sport, league, date, view, theme...)
+  ├── init()             // Bootstrap
+  ├── loadDataForView()  // Roteador de views
+  ├── fetchMatches()     // Jogos + polling ao vivo
+  ├── fetchStandings()   // Classificação
+  ├── fetchScorers()     // Artilharia
+  ├── fetchNews()        // Notícias
+  ├── renderClubs()      // Grid de clubes
+  ├── showTeamSchedule() // Agenda + elenco
+  ├── loadWikiDetail()   // Wiki Wikipedia
+  ├── openMatch()        // Modal detalhado
+  ├── fetchBroadcast…()  // Transmissões
+  ├── trigger*Animation()// Animações (gol, cartão, sub, VAR)
+  └── Pip / MediaSession // PiP e controles de mídia
+```
+
+---
 
 ## 🚀 Como Executar
 
-1.  Certifique-se de ter uma chave válida para a **APIFOOTBALL** e a insira na variável `APIFOOTBALL_KEY` dentro da tag `<script>`.
-2.  Abra o arquivo `index.html` em qualquer navegador web moderno (Chrome, Firefox, Edge).
-3.  A aplicação carregará os dados da liga padrão (Brasileirão) e estará pronta para uso.
+### Pré-requisitos
+- Navegador moderno (Chrome 116+, Edge 116+ para suporte completo a PiP)
+- Conexão com a internet (APIs externas)
+
+### Execução local
+
+```bash
+# Clone o repositório
+git clone https://github.com/seu-usuario/W3Labs-Sports.git
+cd W3Labs-Sports
+
+# Sirva com qualquer servidor estático
+python -m http.server 8080
+# ou
+npx serve .
+```
+
+Depois acesse `http://localhost:8080`.
+
+> ⚠️ **Importante:** não abra o `index.html` diretamente via `file://` — algumas APIs (CORS + `origin=*` da Wikipedia) exigem um servidor HTTP.
+
+---
+
+## 🎮 Como Usar
+
+| Ação | Como fazer |
+|------|-----------|
+| Trocar de esporte | Sidebar → seção "Esportes" |
+| Trocar de liga | Sidebar → "Competições" (ou menu mobile) |
+| Alterar data dos jogos | Ícone de calendário no topo da view "Jogos" |
+| Ver detalhes de uma partida | Clique no card do placar |
+| Ativar Picture-in-Picture | Abra uma partida → botão PiP no header do modal |
+| Alternar tema | Botão de lua/sol no header |
+| Buscar clubes/jogadores | Campo de busca no header |
+| Ver wiki do clube | View "Clubes" → clique no card |
+
+---
+
+## 🎬 Sistema de Animações
+
+Cada liga dispara animações específicas a partir de eventos da API:
+
+| Evento | Método | Ligas |
+|--------|--------|-------|
+| Intro do placar | `playCbfIntro` / `playSerieAIntro` / `playGauchaoIntro` / `playBrasileiraoIntro` | Todas |
+| Gol | `triggerCbfGoalAnimation` / `triggerSerieAGoalAnimation` / `triggerGauchaoGoalAnimation` / `triggerBrasileiraoGoalAnimation` | Todas |
+| Cartão amarelo/vermelho | `trigger*CardAnimation` | Todas |
+| Substituição | `triggerSubstitutionAnimation` | Padrão |
+| VAR | `triggerVARAnimation` | Padrão |
+| Início/Fim de jogo | `triggerStartOfGameAnimation` / `triggerEndOfGameAnimation` | Todas |
+
+---
+
+## 🎨 Personalização de Liga
+
+Para adicionar uma nova liga, edite o objeto `SPORTS_DB.soccer.leagues`:
+
+```javascript
+"minhaliga": {
+  id: "esp.1",                    // ID ESPN
+  apiFootballId: 140,             // (opcional) API-Football
+  seasonId: 2026,
+  name: "Minha Liga",
+  logo: "https://.../logo.png",
+  bg: "https://.../background.jpg",
+  clubs: ["Clube_A", "Clube_B"],  // nomes no padrão Wikipedia
+  logoOverrides: {                // opcional — sobrescreve logos ESPN
+    "Clube A": "https://.../logo.png"
+  },
+  theme: {                        // opcional
+    scoreboardBg: '#1C1C23',
+    scoreboardText: '#FFFFFF'
+  },
+  flagColors: ['#FF0000', '#FFFFFF'] // opcional — bandeira no rodapé
+}
+```
+
+---
+
+## 🎨 Temas
+
+O Design System utiliza **CSS Custom Properties** que são alternadas pela classe `.light-mode` no `<body>`:
+
+```css
+:root {
+  --bg-primary:   #0B1220;   /* Dark */
+  --accent:       #137FEC;
+  --text-primary: #F1F5F9;
+  ...
+}
+
+.light-mode {
+  --bg-primary:   #F4F7FB;
+  --text-primary: #0B1220;
+  ...
+}
+```
+
+A preferência é salva em `localStorage.sporting_theme` e restaurada na inicialização.
+
+---
+
+## 📱 Responsividade
+
+| Breakpoint | Comportamento |
+|-----------|--------------|
+| **< 640px** (mobile) | Sidebar oculta, navegação via navbar flutuante + menu de ligas modal, placares em `scale(0.35–0.55)` |
+| **641–1023px** (tablet) | Sidebar visível (220px), placares em `scale(0.7)`, navbar centralizada |
+| **≥ 1024px** (desktop) | Sidebar completa (260px), placares em `scale(0.88)`, layout em grid multi-coluna |
+
+---
+
+## 🔄 Changelog — v2.0.0
+
+### 🎉 Adicionado
+- **Design System refinado** com nova paleta, sombras, tipografia e raios
+- **Temas de placar exclusivos** para CBF, Serie A ITA, Libertadores, Gauchão, Premier League
+- **Picture-in-Picture** nativo com placar em miniatura
+- **Media Session API** para controles de mídia no SO
+- **Busca global** unificada (clubes + jogadores)
+- **Integração Wikipedia** para páginas de clubes e atletas
+- **Transmissões ao vivo** via API ReidosCanais com múltiplos fallbacks
+- **Chaveamento (bracket)** para torneios eliminatórios
+- **Atualização automática** de partidas ao vivo (15s)
+- **Novas ligas**: Série B, Copa do Brasil, Saudi Pro League, Gauchão, Mineiro, Carioca
+
+### 🔧 Melhorado
+- Performance de renderização (menos reflows, cache de logos e respostas ESPN)
+- Sistema de animações com classes reutilizáveis (`br-anim-*`, `ga-anim-*`, `sa-anim-*`)
+- Acessibilidade das tabelas de classificação com zonas coloridas
+- Tratamento de erros de API com mensagens amigáveis
+
+### 🐛 Corrigido
+- Timer de partidas em tempo real com acréscimos precisos
+- Layout de placares em telas pequenas (escala fluida por breakpoint)
+- Persistência correta do tema entre sessões
+
+---
+
+## 🧪 Roadmap Futuro
+
+- [ ] Módulo **F1** completo (integração OpenF1 já configurada)
+- [ ] **NBA / NFL** via ESPN
+- [ ] Notificações push para gols dos times favoritos
+- [ ] Estatísticas avançadas (xG, mapas de calor)
+- [ ] Modo offline com service worker
+- [ ] Login e sincronização de favoritos
+
+---
+
+## 🤝 Contribuindo
+
+1. Fork o projeto
+2. Crie uma branch: `git checkout -b feature/minha-feature`
+3. Commit: `git commit -m 'feat: adiciona minha feature'`
+4. Push: `git push origin feature/minha-feature`
+5. Abra um Pull Request
+
+---
+
+## 📄 Licença
+
+Distribuído sob a licença **MIT**. Veja `LICENSE` para mais informações.
+
+---
+
+## 🙏 Créditos
+
+- **Dados esportivos:** [ESPN API](https://www.espn.com/)
+- **Wiki:** [Wikipedia PT](https://pt.wikipedia.org/)
+- **Transmissões:** [ReidosCanais](https://reidoscanais.si/)
+- **Fórmula 1:** [OpenF1](https://openf1.org/)
+- **Ícones:** [Lucide](https://lucide.dev/)
+- **Fontes:** [Google Fonts](https://fonts.google.com/)
+
+---
+
+<div align="center">
+
+**⚽ W3LABS SPORTS © 2026 — Feito com paixão por esporte e código**
+
+</div>

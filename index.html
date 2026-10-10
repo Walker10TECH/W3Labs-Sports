@@ -7,18 +7,17 @@
     <title>W3Labs Sports</title>
     <link rel="stylesheet" href="style.css">
 
-    <!-- Fontes do Placar Oficial (Montserrat e Oswald) -->
+    <!-- Fontes -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
-        href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;600;700;800&family=Oswald:wght@500;600&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700;800;900&family=Montserrat:wght@300;600;700;800;900&family=Oswald:wght@500;600;700&family=Roboto+Condensed:wght@700&display=swap"
         rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@700&display=swap" rel="stylesheet">
 
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
 
-    <!-- Flatpickr (Calendário) -->
+    <!-- Flatpickr -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <script src="https://npmcdn.com/flatpickr/dist/l10n/pt.js"></script>
@@ -26,112 +25,113 @@
     <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
 
-    <!-- Mock do BD de jogadores para evitar erros no JS -->
     <script>const PLAYER_DB_DATA = { soccer: {} };</script>
 </head>
 
-<body class="text-[var(--text-primary)] min-h-screen overflow-hidden flex flex-col transition-colors duration-300">
+<body class="text-[var(--text-primary)] min-h-screen overflow-hidden flex flex-col">
 
-    <!-- Tela de Carregamento Global -->
+    <!-- Loader Global -->
     <div id="global-loader"
         class="fixed inset-0 z-[100] bg-[var(--bg-primary)] flex items-center justify-center transition-opacity duration-500">
         <div class="loader-ring"></div>
     </div>
 
-    <!-- Imagem de Fundo Temática -->
-    <div id="app-background" class="fixed inset-0 z-[-1] bg-cover bg-center transition-all duration-1000 opacity-10">
-    </div>
+    <!-- Background Temático -->
+    <div id="app-background" class="fixed inset-0 z-[-1] bg-cover bg-center transition-all duration-1000 opacity-10"></div>
 
-    <!-- Áudio Silencioso para API de Media Session (Opcional) -->
+    <!-- Áudio silencioso para Media Session -->
     <audio id="silent-audio" loop
         src="data:audio/mp3;base64,//NExAAAAANIAAAAAExBTUUzLjEwMKqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq"></audio>
 
     <!-- Header Principal -->
     <header
-        class="h-16 flex items-center justify-between px-4 lg:px-6 border-b border-[var(--glass-border)] bg-[var(--glass-bg)] backdrop-blur-md z-40 relative shrink-0">
+        class="app-header h-16 flex items-center justify-between px-4 lg:px-6 border-b border-[var(--glass-border)] bg-[var(--glass-bg)] backdrop-blur-xl z-40 relative shrink-0">
         <h1 class="flex items-center gap-3 text-xl font-black tracking-wider">
             <button onclick="app.toggleSidebar()"
-                class="mr-2 text-[var(--text-primary)] hover:text-[var(--accent)] transition">
+                class="menu-btn mr-1 text-[var(--text-primary)] hover:text-[var(--accent)] transition">
                 <i data-lucide="menu" class="w-6 h-6"></i>
             </button>
-            <img src="https://lh3.googleusercontent.com/a/ACg8ocLaTLEhiEIrjCMlGuoGKq0TBviLU61sNtnz470CmdLuaETdtNhN=s288-c-no"
-                alt="W3Labs Logo" class="h-8 w-8 object-contain border-2 border-[var(--accent)] rounded-full p-0.5">
-            <span class="hidden sm:inline">W3LABS <span class="text-[var(--accent)]">SPORTS</span></span>
+            <div class="brand-badge relative">
+                <img src="https://lh3.googleusercontent.com/a/ACg8ocLaTLEhiEIrjCMlGuoGKq0TBviLU61sNtnz470CmdLuaETdtNhN=s288-c-no"
+                    alt="W3Labs Logo" class="h-9 w-9 object-contain rounded-full">
+            </div>
+            <span class="hidden sm:inline brand-text">W3LABS <span class="text-[var(--accent)]">SPORTS</span></span>
         </h1>
 
-        <!-- Barra de Pesquisa Global -->
+        <!-- Pesquisa Global -->
         <div class="flex-1 max-w-xl mx-4 relative hidden md:block">
-            <div class="relative">
+            <div class="search-wrapper relative">
                 <i data-lucide="search"
-                    class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--text-muted)]"></i>
+                    class="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--text-muted)] pointer-events-none"></i>
                 <input type="text" id="global-search-input" placeholder="Buscar clubes, jogadores..."
-                    class="w-full bg-[var(--bg-secondary)] border border-[var(--border-color)] text-[var(--text-primary)] text-sm rounded-full py-2 pl-10 pr-4 focus:outline-none focus:border-[var(--accent)] transition">
+                    class="w-full bg-[var(--bg-secondary)] border border-[var(--border-color)] text-[var(--text-primary)] text-sm rounded-full py-2.5 pl-10 pr-4 focus:outline-none focus:border-[var(--accent)] focus:ring-2 focus:ring-[var(--accent)]/20 transition-all">
             </div>
             <div id="global-search-results"
-                class="hidden absolute top-full left-0 right-0 mt-2 bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-xl shadow-2xl max-h-80 overflow-y-auto z-50">
+                class="hidden absolute top-full left-0 right-0 mt-2 bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-2xl shadow-2xl max-h-80 overflow-y-auto custom-scroll z-50">
             </div>
         </div>
 
-        <!-- Toggle Tema e Esporte Atual -->
-        <div class="flex items-center gap-4">
+        <!-- Toggle Tema e Esporte -->
+        <div class="flex items-center gap-3">
             <div
-                class="hidden sm:flex items-center gap-2 bg-[var(--bg-secondary)] px-3 py-1.5 rounded-full border border-[var(--border-color)]">
-                <span id="header-sport-name" class="text-sm font-bold">Esporte</span>
+                class="hidden sm:flex items-center gap-2 bg-[var(--bg-secondary)] px-3.5 py-1.5 rounded-full border border-[var(--border-color)]">
+                <span class="w-1.5 h-1.5 rounded-full bg-[var(--accent)] animate-pulse"></span>
+                <span id="header-sport-name" class="text-xs font-bold uppercase tracking-wider">Esporte</span>
             </div>
             <button onclick="app.toggleTheme()"
-                class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-[var(--glass-border)] transition text-[var(--text-primary)]">
+                class="theme-toggle w-10 h-10 flex items-center justify-center rounded-full hover:bg-[var(--hover-bg)] transition text-[var(--text-primary)]">
                 <i data-lucide="moon" id="theme-icon-moon" class="w-5 h-5"></i>
                 <i data-lucide="sun" id="theme-icon-sun" class="w-5 h-5 hidden"></i>
             </button>
         </div>
     </header>
 
-    <!-- Layout Divisão Tela (Sidebar + Main) -->
+    <!-- Layout Sidebar + Main -->
     <div class="flex flex-1 overflow-hidden relative">
 
-        <!-- Sidebar (Desktop) -->
+        <!-- Sidebar -->
         <aside id="app-sidebar"
-            class="hidden lg:flex flex-col w-64 border-r border-[var(--glass-border)] bg-[var(--glass-bg)] backdrop-blur-md overflow-y-auto custom-scroll p-4 shrink-0 z-50">
-            <h3 class="text-[10px] font-bold text-[var(--text-muted)] uppercase tracking-widest mb-3">Esportes</h3>
+            class="hidden lg:flex flex-col w-64 border-r border-[var(--glass-border)] bg-[var(--glass-bg)] backdrop-blur-xl overflow-y-auto custom-scroll p-4 shrink-0 z-50">
+            <h3 class="sidebar-title">Esportes</h3>
             <div id="sport-menu" class="flex flex-col gap-1 mb-6"></div>
 
-            <!-- Menu ocultado da sidebar para favorecer a nova Navbar central inferior -->
             <div class="nav-card hidden"></div>
 
             <div>
-                <h3 class="text-[10px] font-bold text-[var(--text-muted)] uppercase tracking-widest mb-3">Competições
-                </h3>
+                <h3 class="sidebar-title">Competições</h3>
                 <div id="sidebar-league-list" class="flex flex-col gap-1"></div>
             </div>
         </aside>
 
-        <!-- Conteúdo Principal -->
-        <main id="main-scroll" class="flex-1 overflow-y-auto custom-scroll p-4 md:p-6 lg:p-8 pb-24 lg:pb-8 relative">
+        <!-- Main -->
+        <main id="main-scroll" class="flex-1 overflow-y-auto custom-scroll p-4 md:p-6 lg:p-8 pb-28 lg:pb-10 relative">
 
-            <!-- Header Informativo da View Atual -->
-            <div class="flex items-center justify-between mb-8 border-b border-[var(--glass-border)] pb-4">
+            <!-- Header informativo -->
+            <div class="page-header flex items-center justify-between mb-8">
                 <div class="flex items-center gap-4">
-                    <img id="page-league-logo" class="h-12 md:h-16 object-contain hidden md:block">
+                    <img id="page-league-logo" class="h-12 md:h-16 object-contain hidden md:block drop-shadow-lg">
                     <div>
-                        <h2 id="page-league-name" class="text-2xl md:text-3xl font-black text-[var(--text-primary)]">
+                        <h2 id="page-league-name"
+                            class="text-2xl md:text-3xl font-black text-[var(--text-primary)] tracking-tight">
                             Carregando...</h2>
-                        <p id="page-league-country" class="text-sm font-bold text-[var(--accent)]"></p>
+                        <p id="page-league-country"
+                            class="text-xs md:text-sm font-bold text-[var(--accent)] uppercase tracking-widest mt-0.5"></p>
                     </div>
                 </div>
             </div>
 
-            <!-- View 1: Jogos -->
+            <!-- View: Jogos -->
             <div id="view-matches" class="view-section">
                 <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
                     <div class="flex items-center gap-3">
                         <h3 class="text-xl font-bold">Partidas</h3>
                         <div id="live-indicator"
-                            class="hidden flex items-center gap-1.5 bg-red-500/20 text-red-500 border border-red-500/50 px-2 py-0.5 rounded text-xs font-bold animate-pulse">
+                            class="hidden flex items-center gap-1.5 bg-red-500/20 text-red-500 border border-red-500/50 px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider animate-pulse">
                             <div class="w-1.5 h-1.5 bg-red-500 rounded-full"></div> AO VIVO
                         </div>
                     </div>
                     <div
-                        class="flex items-center gap-2 bg-[var(--bg-secondary)] border border-[var(--glass-border)] rounded-lg px-3 py-2">
+                        class="date-picker-wrapper flex items-center gap-2 bg-[var(--bg-secondary)] border border-[var(--glass-border)] rounded-full px-3.5 py-2 hover:border-[var(--accent)] transition">
                         <i data-lucide="calendar" class="w-4 h-4 text-[var(--accent)]"></i>
                         <input type="text" id="date-picker"
                             class="bg-transparent text-sm font-bold text-center w-24 outline-none cursor-pointer text-[var(--text-primary)]">
@@ -140,20 +140,20 @@
                 <div id="matches-grid" class="grid grid-cols-1 lg:grid-cols-2 2xl:grid-cols-3 gap-6"></div>
             </div>
 
-            <!-- View 2: Classificação -->
+            <!-- View: Classificação -->
             <div id="view-standings" class="view-section hidden">
                 <h3 class="text-xl font-bold mb-6">Tabela de Classificação</h3>
                 <div id="standings-container" class="space-y-6"></div>
                 <div id="standings-legend"></div>
             </div>
 
-            <!-- View 3: Mata-Mata -->
+            <!-- View: Mata-Mata -->
             <div id="view-knockout" class="view-section hidden">
                 <h3 class="text-xl font-bold mb-6">Chaveamento</h3>
                 <div id="knockout-container"></div>
             </div>
 
-            <!-- View 4: Artilharia -->
+            <!-- View: Artilharia -->
             <div id="view-scorers" class="view-section hidden">
                 <div id="scorers-header" class="flex justify-between items-center mb-6">
                     <h3 class="text-xl font-bold">Artilharia</h3>
@@ -163,57 +163,57 @@
                 <div id="scorers-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
             </div>
 
-            <!-- View 5: Notícias -->
+            <!-- View: Notícias -->
             <div id="view-news" class="view-section hidden">
                 <h3 class="text-xl font-bold mb-6">Últimas Notícias</h3>
                 <div id="news-grid" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6"></div>
             </div>
 
-            <!-- View 6: Clubes -->
+            <!-- View: Clubes -->
             <div id="view-clubs" class="view-section hidden">
-                <div class="flex justify-between items-center mb-6">
+                <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 mb-6">
                     <h3 class="text-xl font-bold">Clubes Participantes</h3>
-                    <div class="relative w-full sm:w-64">
+                    <div class="relative w-full sm:w-72">
                         <i data-lucide="search"
-                            class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400"></i>
+                            class="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--text-muted)] pointer-events-none"></i>
                         <input type="text" id="wiki-search-input" placeholder="Buscar wiki do clube..."
-                            class="w-full bg-[var(--bg-secondary)] border border-[var(--border-color)] text-sm rounded-full py-2 pl-10 pr-4 focus:outline-none focus:border-[var(--accent)]">
+                            class="w-full bg-[var(--bg-secondary)] border border-[var(--border-color)] text-sm rounded-full py-2.5 pl-10 pr-4 focus:outline-none focus:border-[var(--accent)] focus:ring-2 focus:ring-[var(--accent)]/20 transition-all">
                     </div>
                 </div>
                 <div id="clubs-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4"></div>
             </div>
 
-            <!-- View 7: Detalhes do Time -->
+            <!-- View: Agenda do Time -->
             <div id="view-team-schedule" class="view-section hidden"></div>
 
-            <!-- View 8: Pesquisa Wikipedia -->
+            <!-- View: Wiki -->
             <div id="wiki-detail" class="hidden">
                 <button onclick="app.closeWiki()"
-                    class="text-[var(--accent)] hover:text-white transition flex items-center gap-2 font-bold mb-6">
-                    <i data-lucide="arrow-left"></i> Voltar
+                    class="text-[var(--accent)] hover:text-[var(--accent-hover)] transition flex items-center gap-2 font-bold mb-6 group">
+                    <i data-lucide="arrow-left" class="group-hover:-translate-x-1 transition"></i> Voltar
                 </button>
                 <div id="wiki-content-area" class="glass-panel p-6 md:p-10"></div>
             </div>
         </main>
     </div>
 
-    <!-- Navbar Centralizada (Flutuante para todos os dispositivos) -->
+    <!-- Navbar Flutuante -->
     <nav class="bottom-nav"></nav>
 
-    <!-- Modal Menu de Ligas (Mobile) -->
+    <!-- Modal Menu Ligas (Mobile) -->
     <div id="mob-league-menu"
         class="hidden fixed inset-0 z-[60] bg-black/90 backdrop-blur-md flex-col p-4 pt-16 overflow-y-auto">
         <button onclick="app.toggleMobileLeague()"
-            class="absolute top-4 right-4 p-2 bg-white/10 rounded-full text-white"><i data-lucide="x"></i></button>
+            class="absolute top-4 right-4 p-2 bg-white/10 rounded-full text-white hover:bg-white/20 transition"><i
+                data-lucide="x"></i></button>
         <h3 class="text-white font-black text-xl mb-6 px-2 border-l-4 border-[var(--accent)]">Ligas</h3>
         <div id="mob-league-list" class="flex flex-col gap-3"></div>
     </div>
 
-    <!-- Modal: Partida Detalhada e Escalações 3D -->
+    <!-- Modal: Partida Detalhada -->
     <div id="match-modal" class="modal-overlay">
         <div class="modal-content relative">
 
-            <!-- Capa Decorativa do Modal -->
             <div id="modal-bg" class="absolute top-0 left-0 right-0 h-64 bg-cover bg-center opacity-20"
                 style="mask-image: linear-gradient(to bottom, black 50%, transparent 100%);"></div>
 
@@ -231,7 +231,6 @@
                 </button>
             </div>
 
-            <!-- Header da Partida: Escudos e Placar -->
             <div class="relative z-10 flex items-center justify-center gap-4 md:gap-10 p-6 md:p-8">
                 <div class="flex flex-col items-center flex-1">
                     <img id="modal-home-logo"
@@ -252,13 +251,11 @@
                 </div>
             </div>
 
-            <!-- Abas do Modal -->
             <div id="match-modal-tabs"
                 class="flex overflow-x-auto custom-scroll border-b border-[var(--glass-border)] bg-[var(--bg-secondary)] z-10 relative px-2">
             </div>
 
             <div class="flex-1 overflow-y-auto custom-scroll relative z-10 bg-[var(--bg-primary)] p-4 md:p-6">
-                <!-- Aba 1: Resumo -->
                 <div id="match-tab-summary" class="match-tab-pane">
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                         <div>
@@ -276,10 +273,8 @@
                     </div>
                 </div>
 
-                <!-- Aba 2: Transmissão -->
                 <div id="match-tab-broadcast" class="match-tab-pane hidden"></div>
 
-                <!-- Aba 3: Escalações 3D -->
                 <div id="match-tab-lineups" class="match-tab-pane hidden">
                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
                         <div id="home-lineup"></div>

@@ -1,4 +1,3 @@
-const APIFOOTBALL_KEY = "9c617e9d2b646ee084b312546b1974fe";
 const SPORTS_DB = {
     "soccer": {
         name: "Futebol",
@@ -13,7 +12,7 @@ const SPORTS_DB = {
         leagues: {
             "brasileirao": {
                 id: "bra.1", apiFootballId: 71, seasonId: 2026, name: "Brasileirão Série A",
-                logo: "https://upload.wikimedia.org/wikipedia/pt/7/75/Campeonato_Brasileiro_de_Futebol_de_2024_-_S%C3%A9rie_A.png",
+                logo: "https://www.ogol.com.br//img/logos/edicoes/184443_imgbank_.png",
                 bg: "https://s2-globo-play.glbimg.com/rHTMAA96-XWwbs6h4pEWeZXlREw=/https://s2.glbimg.com/aNGo_xeD86fO2XMCGBRlpe7rmmg=/i.s3.glbimg.com/v1/AUTH_c3c606ff68e7478091d1ca496f9c5625/internal_photos/bs/2025/L/P/Y3zKUbSTWAUtZN86BTzg/2025-4731-brasileirao-background.jpg",
                 clubs: ["Clube_Atlético_Mineiro", "Esporte_Clube_Bahia", "Botafogo_de_Futebol_e_Regatas", "Ceará_Sporting_Club", "Sport_Club_Corinthians_Paulista", "Cruzeiro_Esporte_Clube", "Clube_de_Regatas_do_Flamengo", "Fluminense_Football_Club", "Fortaleza_Esporte_Clube", "Grêmio_Foot-Ball_Porto_Alegrense", "Sport_Club_Internacional", "Esporte_Clube_Juventude", "Mirassol_Futebol_Clube", "Sociedade_Esportiva_Palmeiras", "Red_Bull_Bragantino", "Santos_Futebol_Clube", "São_Paulo_Futebol_Clube", "Sport_Club_do_Recife", "Club_de_Regatas_Vasco_da_Gama", "Esporte_Clube_Vitória"],
                 logoOverrides: {
@@ -294,8 +293,7 @@ const SPORTS_DB = {
                     "Abha": "https://a.espncdn.com/i/teamlogos/soccer/500/19489.png",
                     "Al-Hazem": "https://a.espncdn.com/i/teamlogos/soccer/500/4670.png"
                 }
-            }
-            ,
+            },
             "paulista": {
                 id: "bra.camp.paulista", apiFootballId: null, seasonId: 2026, name: "Paulistão",
                 logo: "https://upload.wikimedia.org/wikipedia/pt/1/1c/Paulist%C3%A3o_2026.png",
@@ -394,6 +392,7 @@ const API_CONFIG = {
     espn: {
         baseSite: 'https://site.api.espn.com/apis/site/v2/sports',
         baseWeb: 'https://site.web.api.espn.com/apis',
+        baseCore: 'https://sports.core.api.espn.com',
         scoreboard: (sport, league, date) => `${API_CONFIG.espn.baseSite}/${sport}/${league}/scoreboard?lang=pt&region=br&dates=${date}&limit=100`,
         standings: (league) => `${API_CONFIG.espn.baseWeb}/v2/sports/soccer/${league}/standings?lang=pt`,
         gameSummary: (league, eventId) => `${API_CONFIG.espn.baseSite}/soccer/${league}/summary?event=${eventId}&lang=pt`,
@@ -401,15 +400,8 @@ const API_CONFIG = {
         news: (sport, league) => `${API_CONFIG.espn.baseSite}/${sport}/${league}/news?lang=pt&region=br`,
         teams: (sport, league) => `${API_CONFIG.espn.baseSite}/${sport}/${league}/teams?lang=pt&region=br`,
         roster: (league, teamId) => `${API_CONFIG.espn.baseSite}/soccer/${league}/teams/${teamId}/roster?lang=pt`,
-    },
-    apiFootball: {
-        base: 'https://v3.football.api-sports.io',
-        // Chamada direta para a API, pois não há backend/proxy neste projeto.
-        topScorers: (leagueId, season) => `${API_CONFIG.apiFootball.base}/players/topscorers?league=${leagueId}&season=${season}`,
-        // Endpoints abaixo não são utilizados na lógica atual
-        fixtures: (params) => `/api/fixtures?${params}`, // ex: 'league=71&season=2026'
-        standings: (leagueId, season) => `/api/standings?league=${leagueId}&season=${season}`,
-        lineups: (fixtureId) => `/api/lineups?fixture=${fixtureId}`,
+        leaders: (league, season) => `${API_CONFIG.espn.baseCore}/v2/sports/soccer/leagues/${league}/seasons/${season}/types/1/leaders?limit=50`,
+        ref: (url) => url,
     },
     wikipedia: {
         base: 'https://pt.wikipedia.org/w/api.php',
@@ -417,8 +409,15 @@ const API_CONFIG = {
         detail: (title) => `${API_CONFIG.wikipedia.base}?action=query&prop=extracts|pageimages&exintro&explaintext&pithumbsize=500&titles=${encodeURIComponent(title)}&format=json&origin=*`,
     },
     streaming: {
-        esportesEmbed: (slug) => `https://esportesembed.top/${slug}`,
-        reiDosCanais: (slug) => `https://api.reidoscanais.io/sports/${slug}`,
+        base: 'https://api.reidoscanais.si',
+        channels: (category) => `${API_CONFIG.streaming.base}/channels${category ? `?category=${encodeURIComponent(category)}` : ''}`,
+        channelDetail: (id) => `${API_CONFIG.streaming.base}/channels/${id}`,
+        channelCategories: () => `${API_CONFIG.streaming.base}/channels/categories`,
+        sports: (params = '') => `${API_CONFIG.streaming.base}/sports${params}`,
+        sportDetail: (id) => `${API_CONFIG.streaming.base}/sports/${id}`,
+        sportCategories: () => `${API_CONFIG.streaming.base}/sports/categories`,
+        search: (q) => `${API_CONFIG.streaming.base}/search?q=${encodeURIComponent(q)}`,
+        health: () => `${API_CONFIG.streaming.base}/health`,
     },
     openF1: {
         base: 'https://api.openf1.org/v1',
@@ -550,7 +549,7 @@ const app = {
         if (this.state.playerDatabaseCache) {
             return this.state.playerDatabaseCache;
         }
-        this.state.playerDatabaseCache = PLAYER_DB_DATA;
+        this.state.playerDatabaseCache = (typeof PLAYER_DB_DATA !== 'undefined') ? PLAYER_DB_DATA : { soccer: {} };
         return this.state.playerDatabaseCache;
     },
 
@@ -1374,43 +1373,109 @@ const app = {
         const g = document.getElementById('scorers-grid'); if (!g) return;
         g.innerHTML = '<div class="col-span-full py-20 flex justify-center"><div class="loader-ring"></div></div>';
         const leagueData = SPORTS_DB.soccer.leagues[leagueKey];
-        if (!leagueData || !leagueData.apiFootballId) { g.innerHTML = '<div class="col-span-full text-center text-gray-500 glass-panel p-10">Dados indisponíveis.</div>'; return; }
+        if (!leagueData) { g.innerHTML = '<div class="col-span-full text-center text-gray-500 glass-panel p-10">Dados indisponíveis.</div>'; return; }
         const season = this.state.selectedSeason;
         const cacheKey = `${leagueKey}_${season}`;
 
         const renderScorers = async (scorersData) => {
-            if (!scorersData || scorersData.length === 0) { g.innerHTML = '<div class="col-span-full text-center text-gray-500 glass-panel p-10">Sem dados.</div>'; return; }
-            const espnTeams = await this.getEspnLeagueTeams(leagueData.id);
+            if (!scorersData || scorersData.length === 0) {
+                g.innerHTML = '<div class="col-span-full text-center text-gray-500 glass-panel p-10">Sem dados de artilharia para esta competição/temporada.</div>';
+                return;
+            }
             g.innerHTML = '';
             scorersData.slice(0, 20).forEach((item, i) => {
-                const p = item.player; const s = item.statistics[0];
-                const teamNameLower = s.team.name.toLowerCase();
-                const teamData = espnTeams.find(t => t.name.toLowerCase() === teamNameLower || t.displayName.toLowerCase() === teamNameLower);
-                const teamLogo = teamData?.logos?.[0]?.href;
-                const teamLogoImg = teamLogo ? `<img src="${teamLogo}" class="w-5 h-5 mr-2 object-contain">` : '';
                 const card = document.createElement('div');
                 card.className = 'glass-panel !p-4 flex items-center gap-4 cursor-pointer hover:border-[var(--accent)] transition';
-                card.onclick = () => this.loadWikiDetail(p.name, p.photo);
+                card.onclick = () => this.loadWikiDetail(item.playerName, item.photo);
+                const teamLogoImg = item.teamLogo ? `<img src="${item.teamLogo}" class="w-5 h-5 mr-2 object-contain">` : '';
+                const playerPhoto = item.photo
+                    ? `<img src="${item.photo}" class="w-12 h-12 rounded-full border border-[var(--border-color)] object-cover bg-[var(--bg-primary)]" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0iI2EwYTBiMiI+PHBhdGggZD0iTTEyIDJDNi40OCAyIDIgNi40OCAyIDEyczQuNDggMTAgMTAgMTAgMTAtNC40OCAxMC0xMFMxNy41MiAyIDEyIDJ6bTAgMy41YzEuOTMgMCAzLjUgMS41NyAzLjUgMy41UzEzLjkzIDEyLjUgMTIgMTIuNXMtMy41LTEuNTctMy41LTMuNVMxMC4wNyA1LjUgMTIgNS41em0wIDEzLjVjLTIuOTcgMC02LjYxIDEuNDYtOC4wMyA0LjA0QzQuNDIgMjEuMjYgOC4wNiAyMiAxMiAyMnMyLjYxLS43NCAzLjk3LTEuNDZjLTEuNDItMi41OC01LjA2LTQuMDQtOC4wMy00LjA0eiIvPjwvc3ZnPg=='">`
+                    : `<div class="w-12 h-12 rounded-full bg-white/10 flex items-center justify-center"><i data-lucide="user" class="w-6 h-6 text-gray-400"></i></div>`;
                 card.innerHTML = `<div class="font-bold text-2xl text-[var(--accent)] w-8 text-center">${i + 1}</div>
-                            <img src="${p.photo}" class="w-12 h-12 rounded-full border border-[var(--border-color)] object-cover bg-[var(--bg-primary)]">
-                            <div class="flex-1"><div class="font-bold text-lg text-white leading-tight">${p.name}</div><div class="text-sm font-medium flex items-center text-gray-400 mt-1">${teamLogoImg}<span>${s.team.name}</span></div></div>
-                            <div class="font-black text-3xl text-white">${s.goals.total}</div>`;
+                            ${playerPhoto}
+                            <div class="flex-1"><div class="font-bold text-lg text-white leading-tight">${item.playerName}</div><div class="text-sm font-medium flex items-center text-gray-400 mt-1">${teamLogoImg}<span>${item.teamName || '—'}</span></div></div>
+                            <div class="font-black text-3xl text-white">${item.goals}</div>`;
                 g.appendChild(card);
             });
+            if (window.lucide) lucide.createIcons();
         };
 
         if (this.state.scorersCache[cacheKey]) { renderScorers(this.state.scorersCache[cacheKey]); return; }
         try {
-            const res = await fetch(API_CONFIG.apiFootball.topScorers(leagueData.apiFootballId, season), {
-                headers: {
-                    'x-apisports-key': APIFOOTBALL_KEY
-                }
-            });
+            const url = API_CONFIG.espn.leaders(leagueData.id, season);
+            const res = await fetch(url);
             if (!res.ok) throw new Error("API Error");
             const data = await res.json();
-            this.state.scorersCache[cacheKey] = data.response || [];
-            renderScorers(this.state.scorersCache[cacheKey]);
-        } catch (e) { console.error(e); g.innerHTML = '<div class="col-span-full text-center text-red-400">Erro API.</div>'; }
+            const scorers = await this.parseEspnScorers(data);
+            this.state.scorersCache[cacheKey] = scorers;
+            renderScorers(scorers);
+        } catch (e) {
+            console.error("Erro ao buscar artilharia ESPN:", e);
+            g.innerHTML = '<div class="col-span-full text-center text-red-400 glass-panel p-10">Erro ao carregar artilharia via ESPN.</div>';
+        }
+    },
+
+    // Converte a resposta do endpoint /leaders do ESPN Core para o formato da UI.
+    // O endpoint do ESPN retorna referências ($ref) que precisam ser resolvidas.
+    async parseEspnScorers(data) {
+        if (!data) return [];
+        const categories = data.categories || data.items || [];
+
+        // Procura uma categoria de gols (nomes podem variar: "goals", "goalsLeaders", "topScorers"...)
+        const goalsCategory = categories.find(c => {
+            const n = (c.name || c.shortName || '').toLowerCase();
+            return n.includes('goal') || n.includes('scorer') || n.includes('artilh');
+        }) || categories[0];
+
+        if (!goalsCategory || !goalsCategory.leaders) return [];
+
+        const leaders = goalsCategory.leaders.slice(0, 20);
+
+        // Resolve referências em paralelo (athlete + team)
+        const resolved = await Promise.all(leaders.map(async (l) => {
+            try {
+                const athleteRef = l.athlete?.$ref;
+                const teamRef = l.team?.$ref;
+                let playerName = l.athlete?.displayName || '';
+                let photo = l.athlete?.headshot?.href || '';
+                let teamName = l.team?.displayName || l.team?.name || '';
+                let teamLogo = l.team?.logos?.[0]?.href || '';
+
+                if (athleteRef) {
+                    const ar = await fetch(athleteRef);
+                    if (ar.ok) {
+                        const ad = await ar.json();
+                        playerName = ad.displayName || ad.fullName || playerName;
+                        if (ad.headshot?.href) photo = ad.headshot.href;
+                    }
+                }
+                if (teamRef && !teamName) {
+                    const tr = await fetch(teamRef);
+                    if (tr.ok) {
+                        const td = await tr.json();
+                        teamName = td.displayName || td.name || teamName;
+                        if (td.logos?.[0]?.href) teamLogo = td.logos[0].href;
+                    }
+                }
+                return {
+                    playerName: playerName || 'Jogador',
+                    photo,
+                    teamName,
+                    teamLogo,
+                    goals: l.value ?? l.displayValue ?? 0
+                };
+            } catch (err) {
+                return {
+                    playerName: l.athlete?.displayName || 'Jogador',
+                    photo: '',
+                    teamName: l.team?.displayName || '',
+                    teamLogo: '',
+                    goals: l.value ?? 0
+                };
+            }
+        }));
+
+        return resolved.filter(r => r.playerName && r.playerName !== 'Jogador');
     },
 
     async fetchNews(id) {
@@ -1731,8 +1796,12 @@ const app = {
 
     async fetchBroadcastForMatch() {
         const container = document.getElementById('match-tab-broadcast');
-        if (!container || !this.state.currentMatchData?.header) { if (container) container.innerHTML = '<div class="text-center text-gray-500 p-10">Dados não encontrados.</div>'; return; }
+        if (!container || !this.state.currentMatchData?.header) {
+            if (container) container.innerHTML = '<div class="text-center text-gray-500 p-10">Dados não encontrados.</div>';
+            return;
+        }
         container.innerHTML = '<div class="py-20 flex justify-center"><div class="loader-ring"></div></div>';
+
         let matchName = this.state.currentMatchData.header.name;
         if (!matchName) {
             const c = this.state.currentMatchData.header.competitions?.[0];
@@ -1740,14 +1809,71 @@ const app = {
         }
         if (!matchName) { container.innerHTML = '<div class="text-center text-gray-500 p-10">Erro ao buscar nome.</div>'; return; }
 
-        let allEmbeds = [];
-        // ATENÇÃO: A lógica abaixo para gerar links de transmissão é frágil e pode quebrar
-        // se o site de origem (esportesembed.top) alterar sua estrutura de URL. A abordagem
-        // ideal é usar uma API que forneça os links de forma estruturada.
-        const slugEsportes = matchName.replace(/ em /gi, ' x ').replace(/ vs /gi, ' x ').toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9\s-x]/g, '').trim().replace(/\s+/g, '-');
-        for (let i = 1; i <= 3; i++) allEmbeds.push({ embed_url: API_CONFIG.streaming.esportesEmbed(`${slugEsportes}-${i}`), provider: `Opção ${i}`, quality: 'HD' });
+        try {
+            // 1) Busca global por nome da partida na API pública (reidoscanais.si)
+            const searchRes = await fetch(API_CONFIG.streaming.search(matchName));
+            const searchData = await searchRes.json();
 
-        this.renderBroadcastForMatch(allEmbeds);
+            let embeds = [];
+
+            // 2) Se encontrou um evento correspondente, busca os detalhes dele
+            if (searchData?.data?.events?.length > 0) {
+                const event = searchData.data.events[0];
+                // Tenta pegar detalhes completos do evento (embeds podem vir em /sports/{id})
+                try {
+                    const eventRes = await fetch(API_CONFIG.streaming.sportDetail(event.id));
+                    const eventData = await eventRes.json();
+                    if (eventData?.data?.embeds?.length > 0) {
+                        embeds = eventData.data.embeds;
+                    } else if (event.embeds?.length > 0) {
+                        embeds = event.embeds;
+                    }
+                } catch (innerErr) {
+                    if (event.embeds?.length > 0) embeds = event.embeds;
+                }
+            }
+
+            // 3) Fallback: também busca nas categorias de esportes ao vivo
+            if (embeds.length === 0) {
+                try {
+                    const liveRes = await fetch(API_CONFIG.streaming.sports('?status=live'));
+                    const liveData = await liveRes.json();
+                    const liveEvent = (liveData?.data || []).find(ev => {
+                        const t = (ev.title || '').toLowerCase();
+                        return t.includes(matchName.toLowerCase().split(' vs ')[0]) || matchName.toLowerCase().includes(t);
+                    });
+                    if (liveEvent?.embeds?.length > 0) embeds = liveEvent.embeds;
+                    if (embeds.length === 0 && liveEvent?.id) {
+                        const detailRes = await fetch(API_CONFIG.streaming.sportDetail(liveEvent.id));
+                        const detailData = await detailRes.json();
+                        if (detailData?.data?.embeds?.length > 0) embeds = detailData.data.embeds;
+                    }
+                } catch (innerErr) { /* silencioso */ }
+            }
+
+            // 4) Fallback final: canais da categoria "Esportes"
+            if (embeds.length === 0) {
+                try {
+                    const channelsRes = await fetch(API_CONFIG.streaming.channels('Esportes'));
+                    const channelsData = await channelsRes.json();
+                    (channelsData?.data || []).forEach(ch => {
+                        if (ch.embeds?.length > 0) embeds.push(...ch.embeds);
+                    });
+                    // Limita a quantidade para não poluir
+                    embeds = embeds.slice(0, 6);
+                } catch (innerErr) { /* silencioso */ }
+            }
+
+            if (embeds.length === 0) {
+                container.innerHTML = '<div class="text-center text-gray-500 p-10">Nenhuma transmissão disponível para esta partida no momento.</div>';
+                return;
+            }
+
+            this.renderBroadcastForMatch(embeds);
+        } catch (e) {
+            console.error("Erro ao buscar transmissões:", e);
+            container.innerHTML = '<div class="text-center text-red-400 p-10">Erro ao buscar transmissões.</div>';
+        }
     },
 
     renderBroadcastForMatch(embeds) {
@@ -1755,7 +1881,7 @@ const app = {
         if (!container) return;
         container.innerHTML = `
                     <div class="aspect-video bg-black rounded-xl mb-6 overflow-hidden border border-[var(--glass-border)]">
-                        <iframe id="broadcast-player" class="w-full h-full" src="${embeds[0].embed_url}" frameborder="0" allowfullscreen></iframe>
+                        <iframe id="broadcast-player" class="w-full h-full" src="${embeds[0].embed_url}" frameborder="0" allowfullscreen allow="autoplay; encrypted-media; picture-in-picture"></iframe>
                     </div>
                     <div>
                         <h4 class="text-xs font-bold text-gray-500 uppercase mb-3 tracking-widest">Fontes de Transmissão</h4>
@@ -1767,7 +1893,7 @@ const app = {
         embeds.forEach((embed, index) => {
             const card = document.createElement('button');
             card.className = `glass-panel !p-3 flex items-center gap-3 cursor-pointer hover:border-[var(--accent)] w-full ${index === 0 ? 'border-[var(--accent)]' : ''}`;
-            card.innerHTML = `<div class="w-10 h-10 bg-white/5 rounded-lg flex items-center justify-center shrink-0"><i data-lucide="tv-2" class="w-5 h-5 text-[var(--accent)]"></i></div><div class="flex-1 text-left"><div class="font-bold text-base text-[var(--text-primary)]">${embed.provider}</div><div class="text-xs text-gray-400">${embed.quality}</div></div>`;
+            card.innerHTML = `<div class="w-10 h-10 bg-white/5 rounded-lg flex items-center justify-center shrink-0"><i data-lucide="tv-2" class="w-5 h-5 text-[var(--accent)]"></i></div><div class="flex-1 text-left"><div class="font-bold text-base text-[var(--text-primary)]">${embed.provider || ('Opção ' + (index + 1))}</div><div class="text-xs text-gray-400">${embed.quality || 'HD'}</div></div>`;
             card.onclick = () => { player.src = embed.embed_url; list.querySelectorAll('button').forEach(b => b.classList.remove('border-[var(--accent)]')); card.classList.add('border-[var(--accent)]'); };
             list.appendChild(card);
         });
