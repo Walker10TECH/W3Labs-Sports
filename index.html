@@ -3,26 +3,28 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=5.0">
+    <meta name="theme-color" content="#0B1220">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="description" content="W3Labs Sports — placares ao vivo, tabelas, artilharia e estatísticas.">
     <title>W3Labs Sports</title>
+
     <link rel="stylesheet" href="style.css">
 
-    <!-- Fontes -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
         href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700;800;900&family=Montserrat:wght@300;600;700;800;900&family=Oswald:wght@500;600;700&family=Roboto+Condensed:wght@700&display=swap"
         rel="stylesheet">
 
-    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
 
-    <!-- Flatpickr -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <script src="https://npmcdn.com/flatpickr/dist/l10n/pt.js"></script>
 
-    <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
 
     <script>const PLAYER_DB_DATA = { soccer: {} };</script>
@@ -30,260 +32,389 @@
 
 <body class="text-[var(--text-primary)] min-h-screen overflow-hidden flex flex-col">
 
-    <!-- Loader Global -->
+    <!-- =========================================================
+            LOADER INICIAL
+            ========================================================= -->
     <div id="global-loader"
         class="fixed inset-0 z-[100] bg-[var(--bg-primary)] flex items-center justify-center transition-opacity duration-500">
         <div class="loader-ring"></div>
     </div>
 
-    <!-- Background Temático -->
-    <div id="app-background" class="fixed inset-0 z-[-1] bg-cover bg-center transition-all duration-1000 opacity-10"></div>
+    <div id="app-background" class="fixed inset-0 z-[-1] bg-cover bg-center transition-all duration-1000 opacity-10">
+    </div>
 
-    <!-- Áudio silencioso para Media Session -->
     <audio id="silent-audio" loop
         src="data:audio/mp3;base64,//NExAAAAANIAAAAAExBTUUzLjEwMKqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq"></audio>
 
-    <!-- Header Principal -->
+    <!-- =========================================================
+            HEADER
+            ========================================================= -->
     <header
-        class="app-header h-16 flex items-center justify-between px-4 lg:px-6 border-b border-[var(--glass-border)] bg-[var(--glass-bg)] backdrop-blur-xl z-40 relative shrink-0">
-        <h1 class="flex items-center gap-3 text-xl font-black tracking-wider">
-            <button onclick="app.toggleSidebar()"
-                class="menu-btn mr-1 text-[var(--text-primary)] hover:text-[var(--accent)] transition">
-                <i data-lucide="menu" class="w-6 h-6"></i>
-            </button>
-            <div class="brand-badge relative">
+        class="app-header h-14 md:h-16 flex items-center justify-between gap-2 px-3 md:px-4 lg:px-6 border-b border-[var(--glass-border)] bg-[var(--glass-bg)] backdrop-blur-xl z-40 relative shrink-0">
+
+        <!-- Brand -->
+        <h1 class="flex items-center gap-2 md:gap-3 text-xl font-black tracking-wider min-w-0 shrink-0">
+            <div class="brand-badge relative shrink-0">
                 <img src="https://lh3.googleusercontent.com/a/ACg8ocLaTLEhiEIrjCMlGuoGKq0TBviLU61sNtnz470CmdLuaETdtNhN=s288-c-no"
-                    alt="W3Labs Logo" class="h-9 w-9 object-contain rounded-full">
+                    alt="W3Labs Sports" class="h-8 w-8 md:h-9 md:w-9 object-contain rounded-full">
             </div>
-            <span class="hidden sm:inline brand-text">W3LABS <span class="text-[var(--accent)]">SPORTS</span></span>
+            <span class="hidden sm:inline brand-text truncate">W3LABS <span
+                    class="text-[var(--accent)]">SPORTS</span></span>
         </h1>
 
-        <!-- Pesquisa Global -->
-        <div class="flex-1 max-w-xl mx-4 relative hidden md:block">
-            <div class="search-wrapper relative">
-                <i data-lucide="search"
-                    class="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--text-muted)] pointer-events-none"></i>
-                <input type="text" id="global-search-input" placeholder="Buscar clubes, jogadores..."
-                    class="w-full bg-[var(--bg-secondary)] border border-[var(--border-color)] text-[var(--text-primary)] text-sm rounded-full py-2.5 pl-10 pr-4 focus:outline-none focus:border-[var(--accent)] focus:ring-2 focus:ring-[var(--accent)]/20 transition-all">
-            </div>
-            <div id="global-search-results"
-                class="hidden absolute top-full left-0 right-0 mt-2 bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-2xl shadow-2xl max-h-80 overflow-y-auto custom-scroll z-50">
+        <!-- =========================================================
+                DROPDOWN 3D — COMPETIÇÕES (desktop)
+                ========================================================= -->
+        <div id="league-dd" class="league-dd hidden md:block mx-1 lg:mx-2 shrink-0">
+            <button id="league-dd-btn" type="button" class="league-dd-btn" aria-haspopup="true" aria-expanded="false"
+                aria-controls="league-dd-panel">
+                <i data-lucide="trophy" class="w-4 h-4 text-[var(--accent)]"></i>
+                <span class="hidden lg:inline">Competições</span>
+                <i data-lucide="chevron-down" class="league-dd-chevron w-3.5 h-3.5"></i>
+            </button>
+
+            <div id="league-dd-panel" class="league-dd-panel" role="menu" aria-label="Lista de competições">
+                <div class="league-dd-glow"></div>
+
+                <div class="league-dd-head">
+                    <span class="league-dd-title">Competições</span>
+                    <span id="league-dd-count" class="league-dd-count"></span>
+                </div>
+
+                <div class="league-dd-body custom-scroll">
+                    <!-- Populado por script.js -->
+                    <div id="sidebar-league-list" class="flex flex-col gap-1"></div>
+                </div>
             </div>
         </div>
 
-        <!-- Toggle Tema e Esporte -->
-        <div class="flex items-center gap-3">
+        <!-- Busca global (desktop) -->
+        <div class="flex-1 max-w-xl mx-2 md:mx-4 relative hidden md:block">
+            <div class="search-wrapper relative">
+                <i data-lucide="search"
+                    class="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--text-muted)] pointer-events-none"></i>
+                <input type="text" id="global-search-input" placeholder="Buscar clubes, jogadores..." autocomplete="off"
+                    spellcheck="false"
+                    class="w-full bg-[var(--bg-secondary)] border border-[var(--border-color)] text-[var(--text-primary)] text-sm rounded-full py-2.5 pl-10 pr-4 focus:outline-none focus:border-[var(--accent)] focus:ring-2 focus:ring-[var(--accent)]/20 transition-all">
+            </div>
+            <div id="global-search-results"
+                class="hidden absolute top-full left-0 right-0 mt-2 bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-2xl shadow-2xl max-h-80 overflow-y-auto custom-scroll z-50"
+                role="listbox" aria-label="Resultados da busca"></div>
+        </div>
+
+        <!-- Ações do header -->
+        <div class="flex items-center gap-1.5 md:gap-3 shrink-0">
+
+            <!-- Botão MOBILE para abrir competições -->
+            <button type="button" onclick="app.toggleMobileLeague()"
+                class="md:hidden w-10 h-10 flex items-center justify-center rounded-full bg-[var(--bg-secondary)] border border-[var(--border-color)] text-[var(--text-primary)] hover:border-[var(--accent)] transition"
+                aria-label="Abrir competições">
+                <i data-lucide="trophy" class="w-5 h-5 text-[var(--accent)]"></i>
+            </button>
+
+            <!-- Indicador de esporte -->
             <div
-                class="hidden sm:flex items-center gap-2 bg-[var(--bg-secondary)] px-3.5 py-1.5 rounded-full border border-[var(--border-color)]">
+                class="hidden sm:flex items-center gap-2 bg-[var(--bg-secondary)] px-3 py-1.5 rounded-full border border-[var(--border-color)]">
                 <span class="w-1.5 h-1.5 rounded-full bg-[var(--accent)] animate-pulse"></span>
                 <span id="header-sport-name" class="text-xs font-bold uppercase tracking-wider">Esporte</span>
             </div>
+
+            <!-- Toggle de tema -->
             <button onclick="app.toggleTheme()"
-                class="theme-toggle w-10 h-10 flex items-center justify-center rounded-full hover:bg-[var(--hover-bg)] transition text-[var(--text-primary)]">
+                class="theme-toggle w-10 h-10 flex items-center justify-center rounded-full hover:bg-[var(--hover-bg)] text-[var(--text-primary)]"
+                aria-label="Alternar tema">
                 <i data-lucide="moon" id="theme-icon-moon" class="w-5 h-5"></i>
                 <i data-lucide="sun" id="theme-icon-sun" class="w-5 h-5 hidden"></i>
             </button>
         </div>
     </header>
 
-    <!-- Layout Sidebar + Main -->
+    <!-- =========================================================
+            MAIN
+            ========================================================= -->
     <div class="flex flex-1 overflow-hidden relative">
 
-        <!-- Sidebar -->
-        <aside id="app-sidebar"
-            class="hidden lg:flex flex-col w-64 border-r border-[var(--glass-border)] bg-[var(--glass-bg)] backdrop-blur-xl overflow-y-auto custom-scroll p-4 shrink-0 z-50">
-            <h3 class="sidebar-title">Esportes</h3>
-            <div id="sport-menu" class="flex flex-col gap-1 mb-6"></div>
+        <main id="main-scroll" class="flex-1 overflow-y-auto custom-scroll relative" role="main">
 
-            <div class="nav-card hidden"></div>
-
-            <div>
-                <h3 class="sidebar-title">Competições</h3>
-                <div id="sidebar-league-list" class="flex flex-col gap-1"></div>
-            </div>
-        </aside>
-
-        <!-- Main -->
-        <main id="main-scroll" class="flex-1 overflow-y-auto custom-scroll p-4 md:p-6 lg:p-8 pb-28 lg:pb-10 relative">
-
-            <!-- Header informativo -->
-            <div class="page-header flex items-center justify-between mb-8">
-                <div class="flex items-center gap-4">
-                    <img id="page-league-logo" class="h-12 md:h-16 object-contain hidden md:block drop-shadow-lg">
-                    <div>
+            <!-- Page header (liga atual) -->
+            <div class="page-header flex items-center justify-between mb-6 md:mb-8">
+                <div class="flex items-center gap-3 md:gap-4 min-w-0">
+                    <img id="page-league-logo" alt=""
+                        class="h-12 md:h-16 object-contain hidden md:block drop-shadow-lg">
+                    <div class="min-w-0">
                         <h2 id="page-league-name"
-                            class="text-2xl md:text-3xl font-black text-[var(--text-primary)] tracking-tight">
+                            class="text-xl md:text-3xl font-black text-[var(--text-primary)] tracking-tight truncate">
                             Carregando...</h2>
                         <p id="page-league-country"
-                            class="text-xs md:text-sm font-bold text-[var(--accent)] uppercase tracking-widest mt-0.5"></p>
+                            class="text-[10px] md:text-sm font-bold text-[var(--accent)] uppercase tracking-widest mt-0.5">
+                        </p>
                     </div>
                 </div>
             </div>
 
-            <!-- View: Jogos -->
-            <div id="view-matches" class="view-section">
-                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
+            <!-- PARTIDAS -->
+            <section id="view-matches" class="view-section" aria-label="Partidas">
+                <div
+                    class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-5 md:mb-6 gap-3 md:gap-4">
                     <div class="flex items-center gap-3">
-                        <h3 class="text-xl font-bold">Partidas</h3>
+                        <h3 class="text-lg md:text-xl font-bold">Partidas</h3>
                         <div id="live-indicator"
-                            class="hidden flex items-center gap-1.5 bg-red-500/20 text-red-500 border border-red-500/50 px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider animate-pulse">
-                            <div class="w-1.5 h-1.5 bg-red-500 rounded-full"></div> AO VIVO
+                            class="hidden items-center gap-1.5 bg-red-500/20 text-red-500 border border-red-500/50 px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider">
+                            <span class="w-1.5 h-1.5 bg-red-500 rounded-full"></span> AO VIVO
                         </div>
                     </div>
                     <div
-                        class="date-picker-wrapper flex items-center gap-2 bg-[var(--bg-secondary)] border border-[var(--glass-border)] rounded-full px-3.5 py-2 hover:border-[var(--accent)] transition">
+                        class="date-picker-wrapper flex items-center gap-2 bg-[var(--bg-secondary)] border border-[var(--glass-border)] rounded-full px-3.5 py-2 hover:border-[var(--accent)] w-full sm:w-auto justify-center">
                         <i data-lucide="calendar" class="w-4 h-4 text-[var(--accent)]"></i>
-                        <input type="text" id="date-picker"
+                        <input type="text" id="date-picker" readonly
                             class="bg-transparent text-sm font-bold text-center w-24 outline-none cursor-pointer text-[var(--text-primary)]">
                     </div>
                 </div>
-                <div id="matches-grid" class="grid grid-cols-1 lg:grid-cols-2 2xl:grid-cols-3 gap-6"></div>
-            </div>
+                <div id="matches-grid" class="grid grid-cols-1 lg:grid-cols-2 2xl:grid-cols-3 gap-4 md:gap-6"></div>
+            </section>
 
-            <!-- View: Classificação -->
-            <div id="view-standings" class="view-section hidden">
-                <h3 class="text-xl font-bold mb-6">Tabela de Classificação</h3>
+            <!-- CLASSIFICAÇÃO -->
+            <section id="view-standings" class="view-section hidden" aria-label="Classificação">
+                <h3 class="text-lg md:text-xl font-bold mb-5 md:mb-6">Tabela de Classificação</h3>
                 <div id="standings-container" class="space-y-6"></div>
                 <div id="standings-legend"></div>
-            </div>
+            </section>
 
-            <!-- View: Mata-Mata -->
-            <div id="view-knockout" class="view-section hidden">
-                <h3 class="text-xl font-bold mb-6">Chaveamento</h3>
+            <!-- CHAVEAMENTO -->
+            <section id="view-knockout" class="view-section hidden" aria-label="Chaveamento">
+                <h3 class="text-lg md:text-xl font-bold mb-5 md:mb-6">Chaveamento</h3>
                 <div id="knockout-container"></div>
-            </div>
+            </section>
 
-            <!-- View: Artilharia -->
-            <div id="view-scorers" class="view-section hidden">
-                <div id="scorers-header" class="flex justify-between items-center mb-6">
-                    <h3 class="text-xl font-bold">Artilharia</h3>
+            <!-- ARTILHARIA -->
+            <section id="view-scorers" class="view-section hidden" aria-label="Artilharia">
+                <div id="scorers-header"
+                    class="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 mb-5 md:mb-6">
+                    <h3 class="text-lg md:text-xl font-bold">Artilharia</h3>
                     <select id="season-selector"
-                        class="glass-panel px-4 py-2 outline-none font-bold text-sm cursor-pointer"></select>
+                        class="glass-panel px-4 py-2 outline-none font-bold text-sm cursor-pointer"
+                        aria-label="Selecionar temporada"></select>
                 </div>
-                <div id="scorers-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
-            </div>
+                <div id="scorers-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-4"></div>
+            </section>
 
-            <!-- View: Notícias -->
-            <div id="view-news" class="view-section hidden">
-                <h3 class="text-xl font-bold mb-6">Últimas Notícias</h3>
-                <div id="news-grid" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6"></div>
-            </div>
+            <!-- NOTÍCIAS -->
+            <section id="view-news" class="view-section hidden" aria-label="Notícias">
+                <h3 class="text-lg md:text-xl font-bold mb-5 md:mb-6">Últimas Notícias</h3>
+                <div id="news-grid" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 md:gap-6"></div>
+            </section>
 
-            <!-- View: Clubes -->
-            <div id="view-clubs" class="view-section hidden">
-                <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 mb-6">
-                    <h3 class="text-xl font-bold">Clubes Participantes</h3>
+            <!-- CLUBES -->
+            <section id="view-clubs" class="view-section hidden" aria-label="Clubes">
+                <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 md:gap-4 mb-5 md:mb-6">
+                    <h3 class="text-lg md:text-xl font-bold">Clubes Participantes</h3>
                     <div class="relative w-full sm:w-72">
                         <i data-lucide="search"
                             class="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--text-muted)] pointer-events-none"></i>
                         <input type="text" id="wiki-search-input" placeholder="Buscar wiki do clube..."
+                            autocomplete="off" spellcheck="false"
                             class="w-full bg-[var(--bg-secondary)] border border-[var(--border-color)] text-sm rounded-full py-2.5 pl-10 pr-4 focus:outline-none focus:border-[var(--accent)] focus:ring-2 focus:ring-[var(--accent)]/20 transition-all">
                     </div>
                 </div>
-                <div id="clubs-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4"></div>
-            </div>
+                <div id="clubs-grid"
+                    class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 md:gap-4"></div>
+            </section>
 
-            <!-- View: Agenda do Time -->
-            <div id="view-team-schedule" class="view-section hidden"></div>
+            <!-- AGENDA DE TIME -->
+            <section id="view-team-schedule" class="view-section hidden" aria-label="Agenda do time"></section>
 
-            <!-- View: Wiki -->
+            <!-- WIKI DETALHE -->
             <div id="wiki-detail" class="hidden">
                 <button onclick="app.closeWiki()"
-                    class="text-[var(--accent)] hover:text-[var(--accent-hover)] transition flex items-center gap-2 font-bold mb-6 group">
+                    class="text-[var(--accent)] hover:text-[var(--accent-hover)] transition flex items-center gap-2 font-bold mb-5 md:mb-6 group">
                     <i data-lucide="arrow-left" class="group-hover:-translate-x-1 transition"></i> Voltar
                 </button>
-                <div id="wiki-content-area" class="glass-panel p-6 md:p-10"></div>
+                <div id="wiki-content-area" class="glass-panel p-4 md:p-10"></div>
             </div>
         </main>
     </div>
 
-    <!-- Navbar Flutuante -->
-    <nav class="bottom-nav"></nav>
+    <!-- =========================================================
+            BOTTOM NAV
+            ========================================================= -->
+    <nav class="bottom-nav" aria-label="Navegação principal"></nav>
 
-    <!-- Modal Menu Ligas (Mobile) -->
+    <!-- =========================================================
+            MENU MOBILE DE LIGAS (overlay)
+            ========================================================= -->
     <div id="mob-league-menu"
-        class="hidden fixed inset-0 z-[60] bg-black/90 backdrop-blur-md flex-col p-4 pt-16 overflow-y-auto">
+        class="hidden fixed inset-0 z-[60] bg-black/90 backdrop-blur-md flex-col p-4 pt-16 overflow-y-auto"
+        role="dialog" aria-modal="true" aria-label="Competições">
         <button onclick="app.toggleMobileLeague()"
-            class="absolute top-4 right-4 p-2 bg-white/10 rounded-full text-white hover:bg-white/20 transition"><i
-                data-lucide="x"></i></button>
-        <h3 class="text-white font-black text-xl mb-6 px-2 border-l-4 border-[var(--accent)]">Ligas</h3>
+            class="absolute top-4 right-4 p-2 bg-white/10 rounded-full text-white hover:bg-white/20 transition"
+            aria-label="Fechar menu">
+            <i data-lucide="x"></i>
+        </button>
+        <h3 class="text-white font-black text-xl mb-6 px-2 border-l-4 border-[var(--accent)]">Competições</h3>
         <div id="mob-league-list" class="flex flex-col gap-3"></div>
     </div>
 
-    <!-- Modal: Partida Detalhada -->
-    <div id="match-modal" class="modal-overlay">
-        <div class="modal-content relative">
+    <!-- =========================================================
+            MODAL DE PARTIDA — NOVO VISUAL
+            ========================================================= -->
+    <div id="match-modal" class="modal-overlay" role="dialog" aria-modal="true" aria-label="Detalhes da partida">
+        <div class="md-modal">
 
-            <div id="modal-bg" class="absolute top-0 left-0 right-0 h-64 bg-cover bg-center opacity-20"
-                style="mask-image: linear-gradient(to bottom, black 50%, transparent 100%);"></div>
+            <!-- ===== HERO SCOREBOARD ===== -->
+            <div class="md-hero">
+                <div id="modal-bg" class="md-hero-bg"></div>
+                <div class="md-hero-overlay"></div>
 
-            <div
-                class="relative z-10 p-4 border-b border-[var(--glass-border)] flex items-center justify-between bg-gradient-to-b from-black/60 to-transparent">
-                <button id="pip-button" onclick="app.togglePip()"
-                    class="hidden w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center transition text-white">
-                    <i data-lucide="picture-in-picture-2" class="w-5 h-5"></i>
+                <div class="md-topbar">
+                    <button onclick="app.closeModal()" class="md-icon-btn" aria-label="Fechar">
+                        <i data-lucide="x"></i>
+                    </button>
+
+                    <div class="md-status" id="modal-status">PRÉ-JOGO</div>
+
+                    <button id="pip-button" onclick="app.togglePip()" class="md-icon-btn md-pip-btn hidden"
+                        aria-label="Picture-in-Picture">
+                        <i data-lucide="picture-in-picture-2"></i>
+                    </button>
+                </div>
+
+                <div class="md-score-area">
+                    <div class="md-team">
+                        <img id="modal-home-logo" alt="" class="md-team-logo">
+                        <h3 id="modal-home-name" class="md-team-name">Time da Casa</h3>
+                    </div>
+
+                    <div class="md-center">
+                        <div class="md-score" id="modal-score">0 - 0</div>
+                        <div class="md-time" id="modal-time">—</div>
+                    </div>
+
+                    <div class="md-team">
+                        <img id="modal-away-logo" alt="" class="md-team-logo">
+                        <h3 id="modal-away-name" class="md-team-name">Time Visitante</h3>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ===== TABS ===== -->
+            <div id="match-modal-tabs" class="md-tabs">
+                <button class="md-tab active" data-tab="summary" onclick="app.switchMatchModalTab('summary')">
+                    <i data-lucide="list"></i><span>Resumo</span>
                 </button>
-                <div class="flex-1 text-center text-xs font-bold text-gray-300 uppercase tracking-widest"
-                    id="modal-status"></div>
-                <button onclick="app.closeModal()"
-                    class="w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center transition text-white">
-                    <i data-lucide="x" class="w-5 h-5"></i>
+                <button class="md-tab" data-tab="lineups" onclick="app.switchMatchModalTab('lineups')">
+                    <i data-lucide="users"></i><span>Escalações</span>
+                </button>
+                <button class="md-tab" data-tab="stats" onclick="app.switchMatchModalTab('stats')">
+                    <i data-lucide="bar-chart-3"></i><span>Estatísticas</span>
+                </button>
+                <button class="md-tab" data-tab="broadcast" onclick="app.switchMatchModalTab('broadcast')">
+                    <i data-lucide="tv-2"></i><span>Transmissão</span>
                 </button>
             </div>
 
-            <div class="relative z-10 flex items-center justify-center gap-4 md:gap-10 p-6 md:p-8">
-                <div class="flex flex-col items-center flex-1">
-                    <img id="modal-home-logo"
-                        class="w-16 h-16 md:w-24 md:h-24 object-contain filter drop-shadow-xl mb-3">
-                    <h3 id="modal-home-name" class="font-black text-center text-sm md:text-xl text-white"></h3>
-                </div>
-                <div class="flex flex-col items-center justify-center shrink-0">
-                    <div id="modal-score"
-                        class="text-4xl md:text-6xl font-black text-white tracking-tighter drop-shadow-2xl">0 - 0</div>
-                    <div id="modal-time"
-                        class="text-sm font-bold text-[var(--accent)] mt-2 bg-[var(--accent)]/10 px-3 py-1 rounded-full border border-[var(--accent)]/30">
-                    </div>
-                </div>
-                <div class="flex flex-col items-center flex-1">
-                    <img id="modal-away-logo"
-                        class="w-16 h-16 md:w-24 md:h-24 object-contain filter drop-shadow-xl mb-3">
-                    <h3 id="modal-away-name" class="font-black text-center text-sm md:text-xl text-white"></h3>
-                </div>
-            </div>
+            <!-- ===== CONTEÚDO ===== -->
+            <div class="md-content">
 
-            <div id="match-modal-tabs"
-                class="flex overflow-x-auto custom-scroll border-b border-[var(--glass-border)] bg-[var(--bg-secondary)] z-10 relative px-2">
-            </div>
-
-            <div class="flex-1 overflow-y-auto custom-scroll relative z-10 bg-[var(--bg-primary)] p-4 md:p-6">
-                <div id="match-tab-summary" class="match-tab-pane">
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                        <div>
-                            <h4
-                                class="text-xs font-bold text-[var(--text-muted)] uppercase mb-4 tracking-widest border-b border-[var(--glass-border)] pb-2">
-                                Linha do Tempo</h4>
-                            <div id="modal-timeline" class="pt-2"></div>
+                <!-- RESUMO -->
+                <div id="match-tab-summary" class="md-pane">
+                    <div class="md-summary-grid">
+                        <div class="md-card">
+                            <h4 class="md-card-title"><i data-lucide="activity"></i> Linha do Tempo</h4>
+                            <div id="modal-timeline" class="md-timeline"></div>
                         </div>
-                        <div>
-                            <h4
-                                class="text-xs font-bold text-[var(--text-muted)] uppercase mb-4 tracking-widest border-b border-[var(--glass-border)] pb-2">
-                                Estatísticas</h4>
-                            <div id="modal-stats" class="pt-2"></div>
+                        <div class="md-card">
+                            <h4 class="md-card-title"><i data-lucide="zap"></i> Estatísticas Rápidas</h4>
+                            <div id="modal-stats-quick" class="md-stats-quick"></div>
                         </div>
                     </div>
                 </div>
 
-                <div id="match-tab-broadcast" class="match-tab-pane hidden"></div>
-
-                <div id="match-tab-lineups" class="match-tab-pane hidden">
-                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                        <div id="home-lineup"></div>
-                        <div id="away-lineup"></div>
+                <!-- ESCALAÇÕES -->
+                <div id="match-tab-lineups" class="md-pane hidden">
+                    <div class="md-lineups-grid">
+                        <div class="md-lineup-col" id="home-lineup"></div>
+                        <div class="md-lineup-col" id="away-lineup"></div>
                     </div>
                 </div>
+
+                <!-- ESTATÍSTICAS COMPLETAS -->
+                <div id="match-tab-stats" class="md-pane hidden">
+                    <div id="modal-stats" class="md-stats-full"></div>
+                </div>
+
+                <!-- TRANSMISSÃO -->
+                <div id="match-tab-broadcast" class="md-pane hidden"></div>
             </div>
         </div>
     </div>
+
+    <!-- =========================================================
+            CONTROLE DO DROPDOWN 3D — COMPETIÇÕES
+            ========================================================= -->
+    <script>
+        (function () {
+            const wrap = document.getElementById('league-dd');
+            const btn = document.getElementById('league-dd-btn');
+            const panel = document.getElementById('league-dd-panel');
+            const list = document.getElementById('sidebar-league-list');
+            const count = document.getElementById('league-dd-count');
+
+            if (!wrap || !btn || !panel) return;
+
+            let isOpen = false;
+
+            function setOpen(state) {
+                isOpen = !!state;
+                panel.classList.toggle('is-open', isOpen);
+                btn.classList.toggle('is-open', isOpen);
+                btn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+            }
+
+            // Abrir / fechar no botão
+            btn.addEventListener('click', function (e) {
+                e.stopPropagation();
+                setOpen(!isOpen);
+            });
+
+            // Fechar ao clicar fora
+            document.addEventListener('click', function (e) {
+                if (isOpen && !wrap.contains(e.target)) setOpen(false);
+            });
+
+            // Fechar com ESC
+            document.addEventListener('keydown', function (e) {
+                if (e.key === 'Escape' && isOpen) {
+                    setOpen(false);
+                    btn.focus();
+                }
+            });
+
+            // Fechar ao escolher uma competição
+            if (list) {
+                list.addEventListener('click', function () {
+                    setTimeout(function () { setOpen(false); }, 130);
+                });
+            }
+
+            // Contador de competições (observa o que o script.js injeta)
+            function updateCount() {
+                if (!list || !count) return;
+                const n = list.children.length;
+                if (!n) {
+                    count.textContent = '';
+                    count.style.display = 'none';
+                } else {
+                    count.textContent = n + (n === 1 ? ' liga' : ' ligas');
+                    count.style.display = '';
+                }
+            }
+
+            if (list) {
+                new MutationObserver(updateCount).observe(list, { childList: true });
+                updateCount();
+            }
+        })();
+    </script>
 
     <script src="script.js"></script>
 </body>
